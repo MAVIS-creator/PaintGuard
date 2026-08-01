@@ -1,0 +1,25 @@
+# PowerShell & Windows Temp Files
+*.log
+*.tmp
+*.bak
+*.swp
+/scratch/
+
+# Generated Incident Reports & Audit Data
+PaintVirus_Audit.csv
+PaintVirus_Hashes.csv
+RecoveryPlan.csv
+RecoveryVerification.log
+Restoration_Execution.log
+PaintGuard_Incident_Report_*.html
+
+# Local Vault & Quarantine Local Data
+/C:/ProgramData/PaintGuard/
+/PaintGuardEdgeProfile/
+/AppData/
+
+# OS specific files
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.stackdump

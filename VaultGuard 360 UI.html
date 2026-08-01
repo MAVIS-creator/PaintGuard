@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VaultGuard 360 Antivirus & Vaccine Suite</title>
+    <link rel="icon" type="image/svg+xml" href="icon.svg">
+    <link rel="shortcut icon" href="icon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-base: #0f172a;
+            --bg-surface: #1e293b;
+            --bg-card: #1e293b;
+            --bg-card-hover: #334155;
+            
+            --border-subtle: #334155;
+            --border-hover: #475569;
+            
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --primary-light: rgba(37, 99, 235, 0.15);
+            
+            --success: #059669;
+            --success-light: rgba(5, 150, 105, 0.15);
+            
+            --danger: #dc2626;
+            --danger-light: rgba(220, 38, 38, 0.15);
+            
+            --warning: #d97706;
+            --warning-light: rgba(217, 119, 6, 0.15);
+            
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+
+        body {
+            background-color: var(--bg-base);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        header {
+            background-color: #0b1120;
+            border-bottom: 1px solid var(--border-subtle);
+            padding: 16px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .brand { display: flex; align-items: center; gap: 14px; }
+
+        .brand-icon {
+            width: 42px; height: 42px;
+            background: linear-gradient(135deg, #2563eb, #10b981);
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
+        }
+
+        .brand-icon svg { width: 24px; height: 24px; fill: #ffffff; }
+
+        .brand-text h1 { font-size: 18px; font-weight: 700; color: #ffffff; letter-spacing: -0.2px; }
+        .brand-text p { font-size: 12px; color: #10b981; font-weight: 500; }
+
+        .nav-tabs {
+            display: flex;
+            background: #0f172a;
+            padding: 4px; border-radius: 10px;
+            border: 1px solid var(--border-subtle);
+            gap: 4px;
+        }
+
+        .tab-btn {
+            background: transparent; border: none;
+            color: var(--text-secondary);
+            padding: 8px 16px; border-radius: 6px;
+            font-size: 14px; font-weight: 500;
+            cursor: pointer; transition: all 0.2s ease;
+            display: flex; align-items: center; gap: 8px;
+        }
+
+        .tab-btn:hover { color: var(--text-primary); background: rgba(255, 255, 255, 0.04); }
+
+        .tab-btn.active {
+            background: var(--primary);
+            color: #ffffff;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.4);
+        }
+
+        /* HEADER STICKY MINI TELEMETRY BAR */
+        .header-scan-badge {
+            display: none; align-items: center; gap: 12px;
+            background: rgba(37, 99, 235, 0.15); border: 1px solid #2563eb;
+            padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 600; color: #60a5fa;
+        }
+
+        .system-badge {
+            display: flex; align-items: center; gap: 10px;
+            background: var(--success-light);
+            border: 1px solid var(--success);
+            padding: 6px 14px; border-radius: 20px;
+            font-size: 13px; font-weight: 600; color: #10b981;
+        }
+
+        .status-dot {
+            width: 8px; height: 8px;
+            background: #10b981;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        }
+
+        main { flex: 1; padding: 32px; max-width: 1400px; margin: 0 auto; width: 100%; }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.2s ease; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* EMBEDDED IN-TAB LIVE SCAN TELEMETRY BANNER */
+        .embedded-scan-banner {
+            display: none;
+            background: #1e293b; border: 1px solid #38bdf8;
+            border-radius: 14px; padding: 20px 24px; margin-bottom: 24px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .banner-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+        .banner-title { font-size: 16px; font-weight: 700; color: #ffffff; display: flex; align-items: center; gap: 8px; }
+
+        .live-telemetry-grid {
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .telemetry-card {
+            background: #0f172a; border: 1px solid var(--border-subtle);
+            border-radius: 10px; padding: 12px 14px; text-align: left;
+        }
+
+        .telemetry-val { font-size: 20px; font-weight: 700; color: #38bdf8; font-family: 'JetBrains Mono', monospace; }
+        .telemetry-lbl { font-size: 11px; color: var(--text-muted); text-transform: uppercase; font-weight: 600; margin-top: 2px; }
+
+        .progress-box { margin-bottom: 16px; }
+        .progress-meta { display: flex; justify-content: space-between; font-size: 13px; color: var(--text-secondary); margin-bottom: 6px; font-weight: 600; }
+        .progress-bar-bg { background: #0f172a; height: 12px; border-radius: 12px; overflow: hidden; border: 1px solid var(--border-subtle); position: relative; }
+        .progress-bar-fill {
+            height: 100%; width: 0%;
+            background: linear-gradient(90deg, #2563eb, #38bdf8, #10b981);
+            transition: width 0.15s ease-out;
+            box-shadow: 0 0 12px rgba(56, 189, 248, 0.5);
+        }
+
+        .live-access-container {
+            background: #090d16; border: 1px solid var(--border-subtle);
+            border-radius: 8px; padding: 12px 16px;
+        }
+
+        .live-access-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+        .live-access-title { font-size: 11px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; }
+        .live-access-speed { font-size: 12px; font-weight: 700; color: #10b981; font-family: 'JetBrains Mono', monospace; }
+        
+        .live-file-path {
+            font-family: 'JetBrains Mono', monospace; font-size: 12px;
+            color: #60a5fa; white-space: nowrap; overflow: hidden;
+            text-overflow: ellipsis; display: block; line-height: 1.4;
+        }
+
+        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 32px; }
+
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px; padding: 20px;
+            transition: all 0.2s ease;
+        }
+
+        .stat-card:hover { border-color: var(--border-hover); transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2); }
+
+        .stat-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .stat-title { font-size: 13px; color: var(--text-secondary); font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
+        .stat-value { font-size: 28px; font-weight: 700; color: var(--text-primary); }
+        .stat-desc { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+
+        .hero-banner {
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            border: 1px solid var(--border-subtle);
+            border-radius: 14px; padding: 28px 32px;
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 32px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .hero-text h2 { font-size: 22px; font-weight: 700; margin-bottom: 6px; color: #ffffff; }
+        .hero-text p { font-size: 14px; color: var(--text-secondary); max-width: 650px; line-height: 1.5; }
+
+        .btn-primary {
+            background: var(--primary);
+            color: #ffffff; border: none;
+            padding: 14px 26px; border-radius: 8px;
+            font-size: 15px; font-weight: 600; cursor: pointer;
+            display: flex; align-items: center; gap: 10px;
+            box-shadow: 0 2px 10px rgba(37, 99, 235, 0.3); transition: all 0.2s ease;
+        }
+
+        .btn-primary:hover { background: var(--primary-hover); transform: translateY(-1px); }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-primary); border: 1px solid var(--border-subtle);
+            padding: 10px 18px; border-radius: 8px;
+            font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s ease;
+        }
+
+        .btn-secondary:hover { background: rgba(255, 255, 255, 0.1); border-color: var(--border-hover); }
+
+        .btn-danger {
+            background: var(--danger-light);
+            color: #ef4444; border: 1px solid #dc2626;
+            padding: 8px 14px; border-radius: 6px;
+            font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s ease;
+        }
+
+        .btn-danger:hover { background: #dc2626; color: #ffffff; }
+
+        .glass-panel {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 14px; padding: 24px; margin-bottom: 24px;
+        }
+
+        .panel-header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 20px; padding-bottom: 12px;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .panel-title { font-size: 16px; font-weight: 600; color: #ffffff; }
+
+        table { width: 100%; border-collapse: collapse; }
+
+        th {
+            padding: 12px 16px; text-align: left; font-size: 12px; font-weight: 600;
+            color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px;
+            border-bottom: 1px solid var(--border-subtle); background: #0f172a;
+        }
+
+        td {
+            padding: 14px 16px; border-bottom: 1px solid var(--border-subtle);
+            font-size: 14px; color: var(--text-primary);
+        }
+
+        tr:hover td { background: var(--bg-card-hover); }
+
+        .mono { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #60a5fa; }
+
+        .badge-risk {
+            padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 600; display: inline-block;
+        }
+
+        .badge-critical { background: var(--danger-light); color: #f87171; border: 1px solid #dc2626; }
+        .badge-high { background: var(--warning-light); color: #fbbf24; border: 1px solid #d97706; }
+        .badge-medium { background: var(--primary-light); color: #60a5fa; border: 1px solid #2563eb; }
+        .badge-success { background: var(--success-light); color: #34d399; border: 1px solid #059669; }
+
+        .console-box {
+            background: #090d16; border: 1px solid var(--border-subtle);
+            border-radius: 8px; padding: 16px;
+            font-family: 'JetBrains Mono', monospace; font-size: 13px;
+            color: #94a3b8; height: 220px; overflow-y: auto; line-height: 1.6;
+        }
+
+        .log-line { margin-bottom: 4px; display: flex; gap: 10px; }
+        .log-time { color: var(--text-muted); }
+        .log-success { color: #10b981; }
+        .log-error { color: #ef4444; }
+        .log-warn { color: #f59e0b; }
+
+        .table-container { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+        /* RESPONSIVE DESIGN BREAKPOINTS */
+        @media (max-width: 1024px) {
+            header { flex-direction: column; gap: 14px; align-items: stretch; padding: 16px 20px; }
+            .nav-tabs { overflow-x: auto; max-width: 100%; white-space: nowrap; padding: 6px; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .live-telemetry-grid { grid-template-columns: repeat(2, 1fr); }
+            .hero-banner { flex-direction: column; align-items: flex-start; gap: 16px; }
+        }
+
+        @media (max-width: 640px) {
+            main { padding: 14px 10px; }
+            .stats-grid { grid-template-columns: 1fr; }
+            .live-telemetry-grid { grid-template-columns: 1fr; }
+            .panel-header { flex-direction: column; align-items: flex-start; gap: 12px; }
+            .btn-primary, .btn-secondary { width: 100%; justify-content: center; }
+            .brand { justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="brand">
+            <div class="brand-icon">
+                <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-5.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg>
+            </div>
+            <div class="brand-text">
+                <h1>VAULTGUARD 360</h1>
+                <p>Antivirus & Vaccine Suite</p>
+            </div>
+        </div>
+
+        <nav class="nav-tabs">
+            <button class="tab-btn active" id="tabNavDashboard" onclick="switchTab('dashboard')">Dashboard</button>
+            <button class="tab-btn" id="tabNavScanner" onclick="switchTab('scanner')">Threat Scanner</button>
+            <button class="tab-btn" id="tabNavBaseline" onclick="switchTab('baseline')">Baseline Vault</button>
+            <button class="tab-btn" id="tabNavQuarantine" onclick="switchTab('quarantine')">Quarantine</button>
+            <button class="tab-btn" id="tabNavVaccine" onclick="switchTab('vaccine')">Vaccine Hub</button>
+            <button class="tab-btn" id="tabNavReports" onclick="switchTab('reports')">Reports</button>
+        </nav>
+
+        <div style="display: flex; align-items: center; gap: 16px;">
+            <!-- STICKY HEADER LIVE SCAN BADGE (PERSISTS ACROSS ALL TABS) -->
+            <div class="header-scan-badge" id="headerScanBadge">
+                <div class="status-dot" style="background:#38bdf8;"></div>
+                <span id="headerScanText">⚡ SCAN ACTIVE: 0 files (0/s)</span>
+            </div>
+
+            <label style="font-size: 13px; color: var(--text-secondary); cursor: pointer; display: flex; align-items: center; gap: 6px;">
+                <input type="checkbox" id="dryRunToggle" style="accent-color: #2563eb;"> Dry-Run Preview
+            </label>
+
+            <div class="system-badge" id="systemBadge">
+                <div class="status-dot"></div>
+                <span id="badgeText">SYSTEM IMMUNIZED</span>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- GLOBAL IN-TAB LIVE SCAN TELEMETRY BANNER -->
+        <div class="embedded-scan-banner" id="embeddedScanBanner">
+            <div class="banner-header">
+                <div class="banner-title">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="#38bdf8"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                    <span id="bannerTitleText">Multi-Family Threat Scan Active</span>
+                </div>
+                <button class="btn-secondary" style="padding: 4px 10px; font-size: 12px;" onclick="stopActiveScan()">Cancel Scan</button>
+            </div>
+
+            <div class="live-telemetry-grid">
+                <div class="telemetry-card">
+                    <div class="telemetry-val" id="bValScanned">0</div>
+                    <div class="telemetry-lbl">Files Scanned</div>
+                </div>
+                <div class="telemetry-card">
+                    <div class="telemetry-val" id="bValSpeed" style="color: #10b981;">0 /s</div>
+                    <div class="telemetry-lbl">Scan Speed</div>
+                </div>
+                <div class="telemetry-card">
+                    <div class="telemetry-val" id="bValThreats" style="color: #ef4444;">0</div>
+                    <div class="telemetry-lbl">Threats Found</div>
+                </div>
+                <div class="telemetry-card">
+                    <div class="telemetry-val" id="bValElapsed" style="color: #fbbf24;">0s</div>
+                    <div class="telemetry-lbl">Elapsed Time</div>
+                </div>
+            </div>
+
+            <div class="progress-box">
+                <div class="progress-meta">
+                    <span id="bannerProgressStep">Accessing System Binaries</span>
+                    <span id="bannerProgressPercent">0%</span>
+                </div>
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" id="bannerProgressBar"></div>
+                </div>
+            </div>
+
+            <div class="live-access-container">
+                <div class="live-access-header">
+                    <span class="live-access-title">Currently Accessing & Analyzing File:</span>
+                    <span class="live-access-speed" id="bannerSpeedText">⚡ 0 files/sec</span>
+                </div>
+                <span class="live-file-path" id="bannerLiveFilePath">Accessing file system stream...</span>
+            </div>
+        </div>
+
+        <!-- TAB 1: DASHBOARD -->
+        <div id="dashboard" class="tab-content active">
+            <div class="hero-banner">
+                <div class="hero-text">
+                    <h2>1-Click Multi-Family Remediation Wizard</h2>
+                    <p>Execute complete 360 remediation: neutralize Paint/Geacata, Shortcut Worms, and Expiro PE infectors; restore clean binaries from Vault; clean persistence hooks; and lock vaccine traps.</p>
+                </div>
+                <button class="btn-primary" onclick="runOneClickRemediation()">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                    Remediate System Now
+                </button>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-title">Files Analyzed</span>
+                    </div>
+                    <div class="stat-value" id="statScanned">0</div>
+                    <div class="stat-desc">Target drive executables</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-title">Active Threats</span>
+                    </div>
+                    <div class="stat-value" id="statThreats" style="color: #ef4444;">0</div>
+                    <div class="stat-desc">Identified malware matches</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-title">Quarantine Vault</span>
+                    </div>
+                    <div class="stat-value" id="statQuarantine">0</div>
+                    <div class="stat-desc">Isolated threat payloads</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-title">USB Watcher Service</span>
+                    </div>
+                    <div class="stat-value" id="statWatchdog" style="color: #10b981;">ACTIVE</div>
+                    <div class="stat-desc">Win32_VolumeChangeEvent active</div>
+                </div>
+            </div>
+
+            <div class="glass-panel">
+                <div class="panel-header">
+                    <div class="panel-title">System Execution Telemetry & Security Logs</div>
+                    <button class="btn-secondary" onclick="clearConsole()">Clear Terminal</button>
+                </div>
+                <div class="console-box" id="consoleTerminal">
+                    <div class="log-line"><span class="log-time">[00:00:00]</span> <span class="log-success">[STATUS]</span> VaultGuard 360 Security Engine active.</div>
+                    <div class="log-line"><span class="log-time">[00:00:01]</span> <span class="log-success">[REST API]</span> Authenticated loopback server listening on 127.0.0.1.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 2: THREAT SCANNER -->
+        <div id="scanner" class="tab-content">
+            <div class="glass-panel">
+                <div class="panel-header">
+                    <div class="panel-title">Multi-Family Threat Scanner (Paint/Geacata, ShortcutWorm, Expiro)</div>
+                    <div style="display: flex; gap: 12px;">
+                        <button class="btn-secondary" onclick="startDriveScan('QUICK')">Quick Scan (Program Files & Users)</button>
+                        <button class="btn-secondary" onclick="startDriveScan('C:\\')">Scan Drive C:\</button>
+                        <button class="btn-primary" onclick="startDriveScan('ALL')">Full System Scan</button>
+                    </div>
+                </div>
+
+                <!-- AUTOMATED DRY-RUN REVIEW & VERDICT BANNER -->
+                <div id="automatedReviewBanner" style="display: none; background: rgba(37, 99, 235, 0.1); border: 1px solid #2563eb; border-radius: 12px; padding: 20px; margin-bottom: 20px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 8px;">
+                        <span style="font-size: 15px; font-weight: 700; color: #38bdf8; display: flex; align-items: center; gap: 8px;">
+                            🤖 AUTOMATED DRY-RUN VERDICT & RECOMMENDATION REPORT
+                        </span>
+                        <span id="reviewTimestamp" style="font-size: 12px; color: var(--text-muted);">Just now</span>
+                    </div>
+                    <p id="reviewSummaryText" style="font-size: 14px; color: var(--text-primary); line-height: 1.5; margin-bottom: 14px;"></p>
+                    <div id="reviewActionBox" style="background: rgba(16, 185, 129, 0.15); border: 1px solid #10b981; border-radius: 8px; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+                        <span id="reviewActionText" style="font-size: 13px; font-weight: 600; color: #10b981;">Recommendation: System is clean.</span>
+                        <button id="btnExecuteRemediationNow" class="btn-primary" style="display: none; padding: 8px 16px; font-size: 13px;" onclick="uncheckDryRunAndRemediate()">Uncheck Dry-Run & Remediate Now</button>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Family</th>
+                                <th>Verdict</th>
+                                <th>Target Path / Location</th>
+                                <th>Indicators</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="threatTableBody">
+                            <tr><td colspan="5" style="text-align: center; color: var(--text-muted); padding: 24px;">No active scan results. Click "Quick Scan" or "Full System Scan" to initiate.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 3: BASELINE VAULT -->
+        <div id="baseline" class="tab-content">
+            <div class="glass-panel">
+                <div class="panel-header">
+                    <div class="panel-title">Clean-File Baseline Vault & Golden Store</div>
+                    <div style="display: flex; gap: 12px;">
+                        <button class="btn-secondary" onclick="verifyIntegrity()">Verify Integrity</button>
+                        <button class="btn-primary" onclick="captureBaseline()">Capture System Baseline</button>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 20px; display: flex; gap: 16px; align-items: center;">
+                    <button class="btn-secondary" onclick="exportBaseline()">Export Vault to USB</button>
+                    <span id="watchdogStateBadge" class="badge-risk badge-success">USB Watcher: ACTIVE</span>
+                </div>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Original Monitored Path</th>
+                            <th>Baseline SHA-256 Hash</th>
+                            <th>Current System Hash</th>
+                            <th>Integrity Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="baselineTableBody">
+                        <tr><td colspan="5" style="text-align: center; color: var(--text-muted); padding: 24px;">No baseline manifest loaded. Click "Capture System Baseline" to initialize vault.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- TAB 4: QUARANTINE VAULT -->
+        <div id="quarantine" class="tab-content">
+            <div class="glass-panel">
+                <div class="panel-header">
+                    <div class="panel-title">Zero-Data-Loss Threat Quarantine Vault</div>
+                    <button class="btn-secondary" onclick="fetchQuarantineVault()">Refresh Vault</button>
+                </div>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Quarantine ID</th>
+                            <th>Original File Name</th>
+                            <th>Original Path</th>
+                            <th>SHA-256 Hash</th>
+                            <th>Size</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="quarantineTableBody">
+                        <tr><td colspan="6" style="text-align: center; color: var(--text-muted); padding: 24px;">Quarantine vault is empty.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- TAB 5: VACCINE HUB -->
+        <div id="vaccine" class="tab-content">
+            <div class="glass-panel">
+                <div class="panel-header">
+                    <div class="panel-title">Immunization & USB Auto-Vaccine Traps</div>
+                    <div style="display: flex; gap: 12px;">
+                        <button class="btn-secondary" onclick="toggleVaccine(false)">Disable Vaccine</button>
+                        <button class="btn-primary" onclick="toggleVaccine(true)">Administer Vaccine</button>
+                    </div>
+                </div>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Target Protected Path</th>
+                            <th>Immunity Status</th>
+                            <th>Verification Telemetry</th>
+                        </tr>
+                    </thead>
+                    <tbody id="vaccineTableBody">
+                        <tr><td colspan="3" style="text-align: center; color: var(--text-muted); padding: 24px;">Loading vaccine status...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- TAB 6: REPORTS -->
+        <div id="reports" class="tab-content">
+            <div class="glass-panel">
+                <div class="panel-header">
+                    <div class="panel-title">Executive Incident Reports</div>
+                    <button class="btn-primary" onclick="exportIncidentReport()">Generate HTML Report</button>
+                </div>
+                <p style="color: var(--text-secondary); line-height: 1.5; margin-bottom: 20px;">
+                    Generate standalone HTML incident reports complete with full audit timelines, multi-family threat scores, baseline vault verifications, and immunization status.
+                </p>
+                <div id="reportResultBox" style="display: none; background: var(--success-light); border: 1px solid var(--success); padding: 16px; border-radius: 8px; color: #10b981;">
+                    Report generated successfully!
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        let BEARER_TOKEN = urlParams.get('token') || 'LOCAL_TOKEN';
+        let API_BASE = window.location.origin;
+
+        if (API_BASE.startsWith('file:') || API_BASE === 'null') {
+            API_BASE = 'http://127.0.0.1:8080';
+        }
+
+        let pollInterval = null;
+        let scanStartTime = null;
+
+        function isDryRun() {
+            return document.getElementById('dryRunToggle').checked;
+        }
+
+        function showScanBanner(title) {
+            scanStartTime = Date.now();
+            document.getElementById('bannerTitleText').innerText = title + (isDryRun() ? ' [PREVIEW MODE]' : '');
+            document.getElementById('bValScanned').innerText = "0";
+            document.getElementById('bValSpeed').innerText = "0 /s";
+            document.getElementById('bValThreats').innerText = "0";
+            document.getElementById('bValElapsed').innerText = "0s";
+            
+            document.getElementById('bannerProgressBar').style.width = '0%';
+            document.getElementById('bannerProgressPercent').innerText = '0%';
+            document.getElementById('bannerLiveFilePath').innerText = "Connecting to file stream...";
+            document.getElementById('bannerSpeedText').innerText = "⚡ 0 files/sec";
+            
+            document.getElementById('embeddedScanBanner').style.display = 'block';
+            document.getElementById('headerScanBadge').style.display = 'flex';
+        }
+
+        function hideScanBanner() {
+            if (pollInterval) clearInterval(pollInterval);
+            document.getElementById('embeddedScanBanner').style.display = 'none';
+            document.getElementById('headerScanBadge').style.display = 'none';
+        }
+
+        function updateTelemetryDisplay(scanned, speed, threats, currentFile) {
+            const elapsed = Math.floor((Date.now() - scanStartTime) / 1000);
+            
+            // In-Tab Banner Updates
+            document.getElementById('bValScanned').innerText = scanned.toLocaleString();
+            document.getElementById('bValSpeed').innerText = `${speed.toLocaleString()} /s`;
+            document.getElementById('bValThreats').innerText = threats;
+            document.getElementById('bValElapsed').innerText = `${elapsed}s`;
+            
+            document.getElementById('bannerSpeedText').innerText = `⚡ ${speed.toLocaleString()} files/sec`;
+            document.getElementById('bannerLiveFilePath').innerText = currentFile || 'Analyzing system executables...';
+            
+            // Dynamic Logarithmic Progress Bar Calculation
+            let pct = Math.min(98, Math.floor(Math.log10(scanned + 1) * 22));
+            if (scanned === 0) pct = 5;
+            document.getElementById('bannerProgressPercent').innerText = `${pct}%`;
+            document.getElementById('bannerProgressBar').style.width = `${pct}%`;
+            document.getElementById('bannerProgressStep').innerText = `Analyzing target executables (${scanned.toLocaleString()} scanned)`;
+
+            // Sticky Header Mini Telemetry Update (Visible on all tabs!)
+            document.getElementById('headerScanText').innerText = `⚡ SCAN ACTIVE: ${scanned.toLocaleString()} files (${speed.toLocaleString()}/s) [${pct}%]`;
+        }
+
+        function logConsole(msg, type = 'info') {
+            const term = document.getElementById('consoleTerminal');
+            const time = new Date().toLocaleTimeString();
+            let colorClass = 'log-success';
+            if (type === 'error') colorClass = 'log-error';
+            if (type === 'warn') colorClass = 'log-warn';
+            term.innerHTML += `<div class="log-line"><span class="log-time">[${time}]</span> <span class="${colorClass}">${msg}</span></div>`;
+            term.scrollTop = term.scrollHeight;
+        }
+
+        function clearConsole() {
+            document.getElementById('consoleTerminal').innerHTML = '';
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            const btnId = 'tabNav' + tabId.charAt(0).toUpperCase() + tabId.slice(1);
+            if (document.getElementById(btnId)) document.getElementById(btnId).classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+
+            if (tabId === 'quarantine') fetchQuarantineVault();
+            if (tabId === 'vaccine') fetchVaccineStatus();
+            if (tabId === 'baseline') verifyIntegrity();
+        }
+
+        async function apiRequest(endpoint, method = 'GET', body = null) {
+            const headers = {
+                'Authorization': `Bearer ${BEARER_TOKEN}`,
+                'Content-Type': 'application/json'
+            };
+            const opts = { method, headers };
+            if (body) opts.body = JSON.stringify(body);
+
+            try {
+                const res = await fetch(`${API_BASE}${endpoint}`, opts);
+                if (!res.ok) {
+                    const text = await res.text();
+                    logConsole(`API Error (${res.status}): ${text || res.statusText}`, 'error');
+                    return { error: true, status: res.status, message: text };
+                }
+                return await res.json();
+            } catch (err) {
+                logConsole(`API Network Error: Server not reachable at ${API_BASE}. Run Start-PaintGuard.ps1`, 'error');
+                return { error: true, message: err.message };
+            }
+        }
+
+        async function updateStatus() {
+            const data = await apiRequest('/api/status');
+            if (data && !data.error) {
+                if (data.BearerToken) BEARER_TOKEN = data.BearerToken;
+                document.getElementById('statQuarantine').innerText = data.QuarantineCount || 0;
+                if (data.WatchdogStatus && data.WatchdogStatus.Active) {
+                    document.getElementById('statWatchdog').innerText = 'ACTIVE';
+                    document.getElementById('watchdogStateBadge').className = 'badge-risk badge-success';
+                    document.getElementById('watchdogStateBadge').innerText = 'USB Watcher: ACTIVE';
+                }
+                fetchQuarantineVault();
+            }
+        }
+
+        async function runOneClickRemediation() {
+            const dry = isDryRun();
+            showScanBanner('Multi-Family System Remediation');
+            logConsole(`[WIZARD] Initiating Multi-Family Remediation Sequence ${dry ? '(DRY-RUN PREVIEW)' : ''}...`, 'warn');
+
+            const data = await apiRequest('/api/remediate-all', 'POST', { DryRun: dry });
+
+            if (data && !data.error && data.Success) {
+                logConsole(`[WIZARD] Success! Neutralized processes: ${data.KilledProcesses}, Quarantined threats: ${data.ThreatsRemediated}, Restored files: ${data.FilesRestored}`, 'success');
+                hideScanBanner();
+                updateStatus();
+            } else {
+                hideScanBanner();
+            }
+        }
+
+        async function startDriveScan(drive) {
+            const dry = isDryRun();
+            let targetPaths = [drive];
+            let label = drive;
+
+            if (drive === 'QUICK') {
+                targetPaths = ['C:\\Program Files', 'C:\\Program Files (x86)', 'C:\\Users'];
+                label = 'Program Files & Users';
+            } else if (drive === 'ALL') {
+                targetPaths = ['C:\\'];
+                label = 'Full Drive C:\\';
+            }
+
+            showScanBanner(`Multi-Family Threat Scan (${label})`);
+            logConsole(`[SCAN] Starting threat scan on target: ${label} ${dry ? '(DRY-RUN)' : ''}...`);
+
+            const req = await apiRequest('/api/scan', 'POST', { Paths: targetPaths, DryRun: dry });
+            if (req && req.JobId) {
+                pollJob(req.JobId);
+            } else {
+                hideScanBanner();
+            }
+        }
+
+        function stopActiveScan() {
+            hideScanBanner();
+            logConsole('[SCAN] Scan stopped by user.', 'warn');
+        }
+
+        function pollJob(jobId) {
+            if (pollInterval) clearInterval(pollInterval);
+            pollInterval = setInterval(async () => {
+                const job = await apiRequest(`/api/jobs/${jobId}`);
+                if (job && !job.error) {
+                    updateTelemetryDisplay(
+                        job.TotalScanned || 0,
+                        job.FilesPerSec || 0,
+                        job.ThreatsFound || 0,
+                        job.CurrentFile || 'Analyzing executables...'
+                    );
+
+                    if (job.Status === 'COMPLETED') {
+                        clearInterval(pollInterval);
+                        const threats = job.Results ? job.Results.Threats : [];
+                        logConsole(`[SCAN] Scan finished! Scanned ${job.TotalScanned} files at ${job.FilesPerSec} files/sec. Threats found: ${job.ThreatsFound}`, 'success');
+                        document.getElementById('statScanned').innerText = job.TotalScanned;
+                        document.getElementById('statThreats').innerText = job.ThreatsFound;
+                        renderThreats(threats);
+                        generateAutomatedReview(job.TotalScanned || 0, threats, isDryRun());
+                        hideScanBanner();
+                        // Auto-switch to Threat Scanner tab to show results
+                        switchTab('scanner');
+                    } else if (job.Status === 'FAILED') {
+                        clearInterval(pollInterval);
+                        logConsole(`[SCAN] Scan error: ${job.Error}`, 'error');
+                        hideScanBanner();
+                    }
+                }
+            }, 200);
+        }
+
+        function renderThreats(threats) {
+            const tbody = document.getElementById('threatTableBody');
+            if (!threats || threats.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #10b981; padding: 24px;">✅ System clean! No multi-family threats detected.</td></tr>';
+                return;
+            }
+
+            let html = '';
+            threats.forEach(t => {
+                const badgeClass = t.Verdict === 'Infected' ? 'badge-critical' : 'badge-high';
+                const path = t.CandidatePath || t.FilePath || t.TargetDir || 'N/A';
+                const ind = t.Indicators ? t.Indicators.join('; ') : 'Multi-family signature match';
+                html += `
+                    <tr>
+                        <td><strong>${t.Family || 'Malware'}</strong></td>
+                        <td><span class="badge-risk ${badgeClass}">${t.Verdict} (${t.ConfidenceScore || 100}%)</span></td>
+                        <td class="mono">${path}</td>
+                        <td>${ind}</td>
+                        <td>
+                            <button class="btn-danger" onclick="quarantineFile('${path.replace(/\\/g, '\\\\')}')">Remediate</button>
+                        </td>
+                    </tr>
+                `;
+            });
+            tbody.innerHTML = html;
+        }
+
+        function generateAutomatedReview(scannedCount, threats, dryRun) {
+            const banner = document.getElementById('automatedReviewBanner');
+            const summaryText = document.getElementById('reviewSummaryText');
+            const actionText = document.getElementById('reviewActionText');
+            const actionBtn = document.getElementById('btnExecuteRemediationNow');
+            const timestamp = document.getElementById('reviewTimestamp');
+
+            if (!banner) return;
+            banner.style.display = 'block';
+            timestamp.innerText = new Date().toLocaleTimeString();
+
+            if (!threats || threats.length === 0) {
+                summaryText.innerHTML = `<strong>Automated Review Complete:</strong> Scanned <strong>${scannedCount.toLocaleString()}</strong> executables across target directories. <strong>0 threats detected</strong>. All PE headers and twin-file signatures verified clean.`;
+                actionText.style.color = '#10b981';
+                actionText.innerHTML = '✅ System Clean & Immunized. No remediation action required.';
+                actionBtn.style.display = 'none';
+                document.getElementById('reviewActionBox').style.background = 'rgba(16, 185, 129, 0.15)';
+                document.getElementById('reviewActionBox').style.borderColor = '#10b981';
+            } else {
+                const families = [...new Set(threats.map(t => t.Family))].join(', ');
+                summaryText.innerHTML = `<strong>Automated Review Warning:</strong> Scanned <strong>${scannedCount.toLocaleString()}</strong> executables. Identified <strong>${threats.length} active malware payload(s)</strong> matching families: <strong style="color:#ef4444;">${families}</strong>. ${dryRun ? '[Dry-Run Preview: No files modified yet]' : '[Remediated]'}`;
+                
+                if (dryRun) {
+                    actionText.style.color = '#fbbf24';
+                    actionText.innerHTML = `⚠️ <strong>Recommended Action:</strong> Click button to uncheck Dry-Run and isolate ${threats.length} threat payload(s) into Quarantine Vault.`;
+                    actionBtn.style.display = 'inline-flex';
+                    document.getElementById('reviewActionBox').style.background = 'rgba(217, 119, 6, 0.15)';
+                    document.getElementById('reviewActionBox').style.borderColor = '#d97706';
+                } else {
+                    actionText.style.color = '#10b981';
+                    actionText.innerHTML = `✅ <strong>Remediation Complete:</strong> ${threats.length} threats successfully isolated into Quarantine Vault.`;
+                    actionBtn.style.display = 'none';
+                    document.getElementById('reviewActionBox').style.background = 'rgba(16, 185, 129, 0.15)';
+                    document.getElementById('reviewActionBox').style.borderColor = '#10b981';
+                }
+            }
+        }
+
+        function uncheckDryRunAndRemediate() {
+            document.getElementById('dryRunToggle').checked = false;
+            runOneClickRemediation();
+        }
+
+        async function quarantineFile(path) {
+            showScanBanner('Quarantining Threat');
+            logConsole(`[QUARANTINE] Isolating payload: ${path}...`);
+            const res = await apiRequest('/api/quarantine', 'POST', { FilePath: path, DryRun: isDryRun() });
+            hideScanBanner();
+            if (res && res.Success) {
+                logConsole(`[QUARANTINE] Successfully moved to vault (ID: ${res.QuarantineId})`, 'success');
+                updateStatus();
+            }
+        }
+
+        async function captureBaseline() {
+            showScanBanner('Baseline Capture');
+            logConsole('[BASELINE] Capturing clean-file integrity snapshot to Vault...', 'warn');
+            const data = await apiRequest('/api/baseline/capture', 'POST', { DryRun: isDryRun() });
+            hideScanBanner();
+            if (data && data.TotalCaptured !== undefined) {
+                logConsole(`[BASELINE] Baseline Vault captured ${data.TotalCaptured} clean binaries!`, 'success');
+                verifyIntegrity();
+            }
+        }
+
+        async function verifyIntegrity() {
+            const data = await apiRequest('/api/baseline/verify');
+            const tbody = document.getElementById('baselineTableBody');
+            if (data && data.Triage && data.Triage.length > 0) {
+                let html = '';
+                data.Triage.forEach(t => {
+                    let badge = '<span class="badge-risk badge-success">CLEAN</span>';
+                    if (t.Status.includes('PAINT')) badge = '<span class="badge-risk badge-critical">PAINT INFECTED</span>';
+                    if (t.Status === 'MODIFIED') badge = '<span class="badge-risk badge-high">MODIFIED</span>';
+                    
+                    html += `
+                        <tr>
+                            <td class="mono">${t.OriginalPath}</td>
+                            <td class="mono">${t.BaselineHash.substring(0, 16)}...</td>
+                            <td class="mono">${t.CurrentHash.substring(0, 16)}...</td>
+                            <td>${badge}</td>
+                            <td>
+                                ${t.Status !== 'CLEAN' ? `<button class="btn-primary" onclick="restoreFromVaultBlob('${t.OriginalPath.replace(/\\/g, '\\\\')}')">Restore Binary</button>` : '<span>OK</span>'}
+                            </td>
+                        </tr>
+                    `;
+                });
+                tbody.innerHTML = html;
+            } else {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: var(--text-muted); padding: 24px;">No baseline manifest loaded. Click "Capture System Baseline" to initialize vault.</td></tr>';
+            }
+        }
+
+        async function restoreFromVaultBlob(path) {
+            showScanBanner('Vault Restore');
+            logConsole(`[RESTORE] Restoring clean binary for ${path}...`);
+            const res = await apiRequest('/api/baseline/restore', 'POST', { OriginalPath: path, DryRun: isDryRun() });
+            hideScanBanner();
+            if (res && res.Success) {
+                logConsole(`[RESTORE] Restored clean binary via ${res.Level}`, 'success');
+                verifyIntegrity();
+            }
+        }
+
+        async function exportBaseline() {
+            const path = prompt('Enter USB / External Drive Export Path:', 'D:\\VaultGuardVault');
+            if (path) {
+                showScanBanner('Exporting Vault');
+                logConsole(`[EXPORT] Exporting Vault to ${path}...`);
+                const res = await apiRequest('/api/baseline/export', 'POST', { DestinationPath: path, DryRun: isDryRun() });
+                hideScanBanner();
+                if (res && res.Success) {
+                    logConsole(`[EXPORT] Exported Vault to ${res.ExportLocation}`, 'success');
+                }
+            }
+        }
+
+        async function fetchQuarantineVault() {
+            const data = await apiRequest('/api/quarantine/vault');
+            const tbody = document.getElementById('quarantineTableBody');
+            if (data && !data.error && data.Items) {
+                let items = Array.isArray(data.Items) ? data.Items : [data.Items];
+                items = items.filter(i => i && (i.Id || i.OriginalPath));
+                if (items.length > 0) {
+                    let html = '';
+                    items.forEach(item => {
+                        html += `
+                            <tr>
+                                <td class="mono">${item.Id ? item.Id.substring(0, 8) : 'N/A'}...</td>
+                                <td><strong>${item.OriginalName || 'Threat Payload'}</strong></td>
+                                <td class="mono">${item.OriginalPath || 'N/A'}</td>
+                                <td class="mono">${item.SHA256 ? item.SHA256.substring(0, 16) : 'N/A'}...</td>
+                                <td>${item.FileSize ? (item.FileSize / 1024).toFixed(1) : 0} KB</td>
+                                <td>
+                                    <button class="btn-secondary" onclick="restoreFromVault('${item.Id}')">Restore</button>
+                                    <button class="btn-danger" style="margin-left: 6px;" onclick="purgeFromVault('${item.Id}')">Purge</button>
+                                </td>
+                            </tr>
+                        `;
+                    });
+                    tbody.innerHTML = html;
+                    return;
+                }
+            }
+            tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: var(--text-muted); padding: 24px;">Quarantine vault is empty.</td></tr>';
+        }
+
+        async function restoreFromVault(id) {
+            showScanBanner('Restoring File');
+            const res = await apiRequest('/api/quarantine/restore', 'POST', { QuarantineId: id, DryRun: isDryRun() });
+            hideScanBanner();
+            if (res && res.Success) {
+                logConsole(`[VAULT] Restored file to original path: ${res.RestoredPath}`, 'success');
+                updateStatus();
+            }
+        }
+
+        async function purgeFromVault(id) {
+            showScanBanner('Purging Payload');
+            const res = await apiRequest('/api/quarantine/purge', 'POST', { QuarantineId: id, DryRun: isDryRun() });
+            hideScanBanner();
+            if (res && res.Success) {
+                logConsole(`[VAULT] Purged item ${id} from vault`, 'warn');
+                updateStatus();
+            }
+        }
+
+        async function fetchVaccineStatus() {
+            const data = await apiRequest('/api/vaccine');
+            const tbody = document.getElementById('vaccineTableBody');
+            if (data && data.PathStatuses) {
+                let html = '';
+                data.PathStatuses.forEach(v => {
+                    html += `
+                        <tr>
+                            <td class="mono">${v.Path}</td>
+                            <td><span class="badge-risk ${v.IsVaccinated ? 'badge-medium' : 'badge-critical'}">${v.IsVaccinated ? 'VACCINATED' : 'UNPROTECTED'}</span></td>
+                            <td>${v.Details}</td>
+                        </tr>
+                    `;
+                });
+                tbody.innerHTML = html;
+            }
+        }
+
+        async function toggleVaccine(enable) {
+            const endpoint = enable ? '/api/vaccine/enable' : '/api/vaccine/disable';
+            showScanBanner('Vaccine Configuration');
+            logConsole(`[VACCINE] ${enable ? 'Enabling' : 'Disabling'} vaccine traps...`);
+            const res = await apiRequest(endpoint, 'POST', { DryRun: isDryRun() });
+            hideScanBanner();
+            if (res && res.Success) {
+                logConsole(`[VACCINE] Operation complete!`, 'success');
+                fetchVaccineStatus();
+                updateStatus();
+            }
+        }
+
+        async function exportIncidentReport() {
+            showScanBanner('Generating Report');
+            logConsole('[REPORT] Generating Executive Incident HTML Report...');
+            const res = await apiRequest('/api/report/export', 'POST');
+            hideScanBanner();
+            if (res && res.Success) {
+                const box = document.getElementById('reportResultBox');
+                box.style.display = 'block';
+                box.innerText = `Report generated: ${res.ReportPath}`;
+                logConsole(`[REPORT] Saved to ${res.ReportPath}`, 'success');
+            }
+        }
+
+        updateStatus();
+    </script>
+</body>
+</html>
