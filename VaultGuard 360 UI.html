@@ -413,10 +413,18 @@
                     <h2>1-Click Multi-Family Remediation Wizard</h2>
                     <p>Execute complete 360 remediation: neutralize Paint/Geacata, Shortcut Worms, and Expiro PE infectors; restore clean binaries from Vault; clean persistence hooks; and lock vaccine traps.</p>
                 </div>
-                <button class="btn-primary" onclick="runOneClickRemediation()">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-                    Remediate System Now
-                </button>
+                <div style="display: flex; flex-direction: column; gap: 10px; align-items: flex-end;">
+                    <select id="remediationTargetSelect" style="background: #0f172a; color: #f8fafc; border: 1px solid var(--border-subtle); padding: 8px 14px; border-radius: 8px; font-size: 13px; cursor: pointer; outline: none; font-weight: 600;">
+                        <option value="D:\">🎯 Target: Drive D:\</option>
+                        <option value="C:\">🎯 Target: Drive C:\</option>
+                        <option value="QUICK">⚡ Quick: Program Files & Users</option>
+                        <option value="ALL">🌐 Full System: All Mounted Drives</option>
+                    </select>
+                    <button class="btn-primary" onclick="runOneClickRemediation()">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                        Remediate Target Now
+                    </button>
+                </div>
             </div>
 
             <div class="stats-grid">
@@ -738,15 +746,28 @@
             }
         }
 
-        async function runOneClickRemediation() {
+        async function runOneClickRemediation(targetOverride) {
             const dry = isDryRun();
-            showScanBanner('Multi-Family System Remediation');
-            logConsole(`[WIZARD] Initiating Multi-Family Remediation Sequence ${dry ? '(DRY-RUN PREVIEW)' : ''}...`, 'warn');
+            const selectEl = document.getElementById('remediationTargetSelect');
+            const target = targetOverride || (selectEl ? selectEl.value : 'C:\\');
+            let targetPaths = [target];
+            let label = target;
 
-            const data = await apiRequest('/api/remediate-all', 'POST', { DryRun: dry });
+            if (target === 'QUICK') {
+                targetPaths = ['C:\\Program Files', 'C:\\Program Files (x86)', 'C:\\Users'];
+                label = 'Program Files & Users';
+            } else if (target === 'ALL') {
+                targetPaths = ['C:\\', 'D:\\'];
+                label = 'All Drives (Full System)';
+            }
+
+            showScanBanner(`Multi-Family Remediation (${label})`);
+            logConsole(`[WIZARD] Initiating Remediation on ${label} ${dry ? '(DRY-RUN PREVIEW)' : ''}...`, 'warn');
+
+            const data = await apiRequest('/api/remediate-all', 'POST', { TargetPaths: targetPaths, DryRun: dry });
 
             if (data && !data.error && data.Success) {
-                logConsole(`[WIZARD] Success! Neutralized processes: ${data.KilledProcesses}, Quarantined threats: ${data.ThreatsRemediated}, Restored files: ${data.FilesRestored}`, 'success');
+                logConsole(`[WIZARD] Success on ${label}! Quarantined threats: ${data.ThreatsRemediated}, Restored files: ${data.FilesRestored}, Persistence repaired: ${data.PersistenceFixed}`, 'success');
                 hideScanBanner();
                 updateStatus();
             } else {
@@ -784,9 +805,14 @@
         }
 
         function pollJob(jobId) {
-            if (pollInterval) clearInterval(pollInterval);
+            if (pollInterval) {
+                clearInterval(pollInterval);
+                pollInterval = null;
+            }
+            const thisJobId = jobId;
             pollInterval = setInterval(async () => {
-                const job = await apiRequest(`/api/jobs/${jobId}`);
+                if (!pollInterval) return;
+                const job = await apiRequest(`/api/jobs/${thisJobId}`);
                 if (job && !job.error) {
                     updateTelemetryDisplay(
                         job.TotalScanned || 0,
@@ -795,21 +821,23 @@
                         job.CurrentFile || 'Analyzing executables...'
                     );
 
-                    if (job.Status === 'COMPLETED') {
+                    if (job.Status === 'COMPLETED' || job.Status === 'FAILED') {
                         clearInterval(pollInterval);
-                        const threats = job.Results ? job.Results.Threats : [];
-                        logConsole(`[SCAN] Scan finished! Scanned ${job.TotalScanned} files at ${job.FilesPerSec} files/sec. Threats found: ${job.ThreatsFound}`, 'success');
-                        document.getElementById('statScanned').innerText = job.TotalScanned;
-                        document.getElementById('statThreats').innerText = job.ThreatsFound;
-                        renderThreats(threats);
-                        generateAutomatedReview(job.TotalScanned || 0, threats, isDryRun());
-                        hideScanBanner();
-                        // Auto-switch to Threat Scanner tab to show results
-                        switchTab('scanner');
-                    } else if (job.Status === 'FAILED') {
-                        clearInterval(pollInterval);
-                        logConsole(`[SCAN] Scan error: ${job.Error}`, 'error');
-                        hideScanBanner();
+                        pollInterval = null;
+
+                        if (job.Status === 'COMPLETED') {
+                            const threats = job.Results ? job.Results.Threats : [];
+                            logConsole(`[SCAN] Scan finished! Scanned ${job.TotalScanned} files at ${job.FilesPerSec} files/sec. Threats found: ${job.ThreatsFound}`, 'success');
+                            document.getElementById('statScanned').innerText = job.TotalScanned;
+                            document.getElementById('statThreats').innerText = job.ThreatsFound;
+                            renderThreats(threats);
+                            generateAutomatedReview(job.TotalScanned || 0, threats, isDryRun());
+                            hideScanBanner();
+                            switchTab('scanner');
+                        } else {
+                            logConsole(`[SCAN] Scan error: ${job.Error}`, 'error');
+                            hideScanBanner();
+                        }
                     }
                 }
             }, 200);

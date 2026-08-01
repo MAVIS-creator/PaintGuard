@@ -395,7 +395,10 @@ while ($script:Running -and $HttpListener.IsListening) {
             
             "/api/remediate-all" {
                 $DryRun = ($Body -and $Body.DryRun -eq $true)
-                $Scan = Invoke-VaultGuardScan -Paths @("C:\") -DryRun:$DryRun
+                $TargetPaths = @("C:\")
+                if ($Body -and $Body.TargetPaths) { $TargetPaths = $Body.TargetPaths }
+                
+                $Scan = Invoke-VaultGuardScan -Paths $TargetPaths -DryRun:$DryRun
                 $QuarantinedCount = 0
                 $RestoredCount = 0
                 
