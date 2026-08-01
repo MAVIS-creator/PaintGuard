@@ -62,32 +62,53 @@ function Set-VaultGuardVaccine {
                 "HKLM:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer"
             )
             foreach ($RP in $RegPaths) {
-                if (-not (Test-Path $RP)) { New-Item -Path $RP -Force | Out-Null }
-                Set-ItemProperty -Path $RP -Name "NoDriveTypeAutoRun" -Value 0xFF -Type DWord -Force | Out-Null
+                try {
+                    if (-not (Test-Path $RP)) { New-Item -Path $RP -Force -ErrorAction SilentlyContinue | Out-Null }
+                    Set-ItemProperty -Path $RP -Name "NoDriveTypeAutoRun" -Value 0xFF -Type DWord -Force -ErrorAction SilentlyContinue | Out-Null
+                } catch {}
             }
         }
     }
 
-    # 3. Vaccinate Connected USB Media (FAT32 & NTFS empty autorun.inf folder trick)
+    # 3. Vaccinate Connected USB Media & All Drives (FAT32 & NTFS empty autorun.inf folder trick)
     if ($VaccinateConnectedUSB) {
-        $UsbDrives = Get-Volume | Where-Object { $_.DriveType -eq "Removable" -and $_.DriveLetter }
-        foreach ($Usb in $UsbDrives) {
-            $AutorunFolder = "$($Usb.DriveLetter):\autorun.inf"
+        $AllVolumes = Get-CimInstance Win32_LogicalDisk | Where-Object { $_.DriveType -eq 2 -or $_.DriveType -eq 3 }
+        foreach ($Vol in $AllVolumes) {
+            if (-not $Vol.DeviceID) { continue }
+            $AutorunFolder = "$($Vol.DeviceID)\autorun.inf"
             if ($DryRun -or $WhatIfPreference) {
-                $Results += [PSCustomObject]@{ Path = $AutorunFolder; Status = "DryRun: Would vaccinate USB" }
+                $Results += [PSCustomObject]@{ Path = $AutorunFolder; Status = "DryRun: Would vaccinate drive $($Vol.DeviceID)" }
                 continue
             }
 
             try {
-                if (Test-Path $AutorunFolder) {
+                if (Test-Path -LiteralPath $AutorunFolder) {
                     $Item = Get-Item -LiteralPath $AutorunFolder -Force
-                    if (-not $Item.PSIsContainer) { Remove-Item -Path $AutorunFolder -Force }
+                    if (-not $Item.PSIsContainer) { Remove-Item -LiteralPath $AutorunFolder -Force }
                 }
-                if (-not (Test-Path $AutorunFolder)) {
+                if (-not (Test-Path -LiteralPath $AutorunFolder)) {
                     New-Item -ItemType Directory -Path $AutorunFolder -Force | Out-Null
                 }
-                $Results += [PSCustomObject]@{ Path = $AutorunFolder; Status = "USB_VACCINATED" }
-            } catch {}
+
+                # Set ReadOnly, System, Hidden attributes on autorun.inf folder
+                $Item = Get-Item -LiteralPath $AutorunFolder -Force
+                $Item.Attributes = "ReadOnly, Hidden, System"
+
+                # Apply NTFS Deny Write/Delete ACL if NTFS
+                $Format = $Vol.FileSystem
+                if ($Format -eq "NTFS") {
+                    try {
+                        $Acl = Get-Acl -Path $AutorunFolder
+                        $DenyRule = New-Object System.Security.AccessControl.FileSystemAccessRule("Everyone", "Write, Delete", "ContainerInherit, ObjectInherit", "None", "Deny")
+                        $Acl.AddAccessRule($DenyRule)
+                        Set-Acl -Path $AutorunFolder -AclObject $Acl -ErrorAction SilentlyContinue
+                    } catch {}
+                }
+
+                $Results += [PSCustomObject]@{ Path = $AutorunFolder; Status = "DRIVE_IMMUNIZED"; DriveType = $Vol.DriveType; FileSystem = $Format }
+            } catch {
+                $Results += [PSCustomObject]@{ Path = $AutorunFolder; Status = "ERROR: $($_.Exception.Message)" }
+            }
         }
     }
 
@@ -131,11 +152,12 @@ function Get-VaultGuardVaccineStatus {
     $Statuses = @()
     $AllVaccinated = $true
 
+    # 1. System PC Path Traps
     foreach ($Path in $script:TargetVaccinePaths) {
         $IsVac = $false
         $Details = "Missing"
 
-        if (Test-Path $Path) {
+        if (Test-Path -LiteralPath $Path) {
             $Item = Get-Item -LiteralPath $Path -Force
             if ($Item.PSIsContainer) {
                 $IsVac = $true
@@ -152,12 +174,47 @@ function Get-VaultGuardVaccineStatus {
         }
     }
 
-    # Check AutoRun Policy
+    # 2. Drive Volume Root autorun.inf Traps (C:\autorun.inf, D:\autorun.inf, USBs)
+    $AllVolumes = Get-CimInstance Win32_LogicalDisk | Where-Object { $_.DriveType -eq 2 -or $_.DriveType -eq 3 }
+    foreach ($Vol in $AllVolumes) {
+        if (-not $Vol.DeviceID) { continue }
+        $AutorunFolder = "$($Vol.DeviceID)\autorun.inf"
+        $IsVac = $false
+        $Details = "No autorun.inf trap"
+
+        if (Test-Path -LiteralPath $AutorunFolder) {
+            $Item = Get-Item -LiteralPath $AutorunFolder -Force
+            if ($Item.PSIsContainer) {
+                $IsVac = $true
+                $Fs = if ($Vol.FileSystem) { $Vol.FileSystem } else { "NTFS/FAT32" }
+                $Details = "Drive autorun.inf directory trap present ($Fs)"
+            } else {
+                $Details = "MALICIOUS autorun.inf file present!"
+                $AllVaccinated = $false
+            }
+        } else {
+            $AllVaccinated = $false
+        }
+
+        $Statuses += [PSCustomObject]@{
+            Path         = $AutorunFolder
+            IsVaccinated = $IsVac
+            Details      = $Details
+        }
+    }
+
+    # 3. Check AutoRun Policy Status
     $AutoRunLocked = $false
     try {
         $Val = (Get-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer" -Name "NoDriveTypeAutoRun" -ErrorAction SilentlyContinue).NoDriveTypeAutoRun
-        if ($Val -eq 255) { $AutoRunLocked = $true }
+        if ($Val -eq 255 -or $Val -eq 0xFF) { $AutoRunLocked = $true }
     } catch {}
+
+    $Statuses += [PSCustomObject]@{
+        Path         = "Registry Policy: NoDriveTypeAutoRun"
+        IsVaccinated = $AutoRunLocked
+        Details      = if ($AutoRunLocked) { "Policy Locked (0xFF - AutoRun Disabled for All Drives)" } else { "Unprotected (Default AutoRun Enabled)" }
+    }
 
     return @{
         FullyVaccinated      = $AllVaccinated

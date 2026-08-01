@@ -583,9 +583,10 @@
             <div class="glass-panel">
                 <div class="panel-header">
                     <div class="panel-title">Immunization & USB Auto-Vaccine Traps</div>
-                    <div style="display: flex; gap: 12px;">
-                        <button class="btn-secondary" onclick="toggleVaccine(false)">Disable Vaccine</button>
-                        <button class="btn-primary" onclick="toggleVaccine(true)">Administer Vaccine</button>
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        <button class="btn-secondary" onclick="toggleVaccine(false)">Remove Vaccine Traps</button>
+                        <button class="btn-secondary" onclick="administerUsbVaccine()">Immunize USB Drives & Removable Media</button>
+                        <button class="btn-primary" onclick="toggleVaccine(true)">Immunize All (PC + USBs + AutoRun)</button>
                     </div>
                 </div>
 
@@ -1063,6 +1064,19 @@
             hideScanBanner();
             if (res && res.Success) {
                 logConsole(`[VACCINE] Operation complete!`, 'success');
+                fetchVaccineStatus();
+                updateStatus();
+            }
+        }
+
+        async function administerUsbVaccine() {
+            const dry = isDryRun();
+            showScanBanner('Vaccinating USB & Removable Media');
+            logConsole('[VACCINE] Administering immutable autorun.inf directory traps on USB & volume roots...', 'warn');
+            const res = await apiRequest('/api/vaccine/enable', 'POST', { HardenAutoRunPolicy: true, VaccinateConnectedUSB: true, DryRun: dry });
+            hideScanBanner();
+            if (res && res.Success) {
+                logConsole('[VACCINE] Successfully immunized connected USB drives & AutoRun policy!', 'success');
                 fetchVaccineStatus();
                 updateStatus();
             }

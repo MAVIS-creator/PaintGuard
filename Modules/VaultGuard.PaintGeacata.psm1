@@ -35,16 +35,37 @@ function Test-PaintGeacataThreat {
         $Confidence += 50
     }
 
-    # Indicator 2: Hidden v<name>.exe Twin-Pair Check
+    # Indicator 2: Hidden twin-pair check (v<name>.exe, gvg<name>.exe, vvg<name>.exe)
     $Directory = $File.DirectoryName
     $FileName = $File.Name
-    $HiddenTwinPath = Join-Path $Directory "v$FileName"
+    $FoundTwinPath = $null
 
-    if (Test-Path $HiddenTwinPath) {
-        $TwinFile = Get-Item -LiteralPath $HiddenTwinPath -Force
-        if ($TwinFile.Attributes -match "Hidden" -or $TwinFile.Attributes -match "System") {
-            $Indicators += "Found hidden twin-pair binary: $HiddenTwinPath"
-            $Confidence += 45
+    $CandidateTwins = @(
+        (Join-Path $Directory "v$FileName"),
+        (Join-Path $Directory "gvg$FileName"),
+        (Join-Path $Directory "vvg$FileName")
+    )
+
+    $WildcardMatches = Get-ChildItem -LiteralPath $Directory -Filter "*$FileName" -Force -ErrorAction SilentlyContinue | Where-Object {
+        $_.Attributes -match "Hidden" -or $_.Attributes -match "System"
+    }
+    if ($WildcardMatches) {
+        foreach ($wm in $WildcardMatches) {
+            if ($wm.Name -ne $FileName -and ($wm.Name -match "^v" -or $wm.Name -match "^gvg")) {
+                $CandidateTwins += $wm.FullName
+            }
+        }
+    }
+
+    foreach ($TwinPath in $CandidateTwins) {
+        if (Test-Path -LiteralPath $TwinPath) {
+            $TwinFile = Get-Item -LiteralPath $TwinPath -Force
+            if ($TwinFile.Attributes -match "Hidden" -or $TwinFile.Attributes -match "System") {
+                $Indicators += "Found hidden twin-pair binary: $TwinPath"
+                $Confidence += 45
+                $FoundTwinPath = $TwinPath
+                break
+            }
         }
     }
 
@@ -73,7 +94,7 @@ function Test-PaintGeacataThreat {
         ConfidenceScore = $Confidence
         Indicators      = $Indicators
         CandidatePath   = $File.FullName
-        HiddenPairPath  = if (Test-Path $HiddenTwinPath) { $HiddenTwinPath } else { $null }
+        HiddenPairPath  = $FoundTwinPath
     }
 }
 
