@@ -1,9 +1,9 @@
 @echo off
-title VaultGuard 360 - Full Automated Build & Hardening Pipeline (Klyvex Studios)
+title VaultGuard 360 - Full Automated Build and Hardening Pipeline (Klyvex Studios)
 color 0A
 
 echo ================================================================================
-echo           VAULTGUARD 360 - AUTOMATED BUILD & HARDENING PIPELINE
+echo           VAULTGUARD 360 - AUTOMATED BUILD AND HARDENING PIPELINE
 echo           Created by Klyvex Studios
 echo ================================================================================
 echo.
@@ -14,7 +14,7 @@ echo [1/4] Linking Git Repository...
 powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0Update-GitRemote.ps1"
 echo.
 
-echo [2/4] Generating Icon & Compiling VaultGuard360.exe...
+echo [2/4] Generating Icon and Compiling VaultGuard360.exe...
 powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0Build-App.ps1"
 echo.
 
@@ -27,6 +27,6 @@ powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0Build-Installer.ps1"
 echo.
 
 echo ================================================================================
-echo [COMPLETE] All VaultGuard 360 build & hardening steps completed!
+echo [COMPLETE] All VaultGuard 360 build and hardening steps completed!
 echo ================================================================================
 pause

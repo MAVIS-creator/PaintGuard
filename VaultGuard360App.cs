@@ -333,7 +333,7 @@ namespace VaultGuard360
                         if (newState)
                         {
                             string exePath = Application.ExecutablePath;
-                            key.SetValue(APP_NAME, $"\"{exePath}\" --autostart");
+                            key.SetValue(APP_NAME, "\"" + exePath + "\" --autostart");
                             MessageBox.Show("VaultGuard 360 will now start automatically when Windows boots.", "Auto-Start Enabled", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
                         else
@@ -399,7 +399,7 @@ namespace VaultGuard360
                 var fileName = Path.GetFileName(Process.GetCurrentProcess().MainModule.FileName);
                 using (var key = Registry.CurrentUser.CreateSubKey(@"Software\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION"))
                 {
-                    key?.SetValue(fileName, 11001, RegistryValueKind.DWord); // Force IE11 mode
+                    if (key != null) key.SetValue(fileName, 11001, RegistryValueKind.DWord); // Force IE11 mode
                 }
             }
             catch {}

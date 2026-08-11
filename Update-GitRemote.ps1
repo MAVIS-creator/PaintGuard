@@ -37,6 +37,12 @@ try {
     Write-Host "Current configured remotes:" -ForegroundColor Yellow
     git remote -v
 
+    Write-Host "`n[+] Fetching remote repository..." -ForegroundColor Cyan
+    git fetch origin
+
+    Write-Host "`n[+] Syncing with remote main branch (allowing unrelated histories)..." -ForegroundColor Cyan
+    git pull origin main --allow-unrelated-histories --no-rebase -m "Merge remote repository history"
+
     Write-Host "`nBranch Status:" -ForegroundColor Yellow
     git status -s
 } catch {
