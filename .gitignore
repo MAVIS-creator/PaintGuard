@@ -40,3 +40,5 @@ VaultGuard360.exe
 *.exe
 *.obj
 *.pdb
+/obj/
+/bin/
