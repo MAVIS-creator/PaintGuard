@@ -19,8 +19,10 @@
 
   <!-- Exclude Custom Installer Files from Main Antivirus App Build -->
   <ItemGroup>
+    <ApplicationDefinition Remove="SetupApp.xaml" />
     <Compile Remove="SetupApp.xaml.cs" />
     <Compile Remove="InstallerWindow.xaml.cs" />
+    <Compile Remove="SetupProgram.cs" />
     <Compile Remove="Services\InstallerEngineService.cs" />
     <Page Remove="SetupApp.xaml" />
     <Page Remove="InstallerWindow.xaml" />

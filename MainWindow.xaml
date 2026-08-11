@@ -3,91 +3,98 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:views="clr-namespace:VaultGuard360.Views"
         xmlns:vm="clr-namespace:VaultGuard360.ViewModels"
-        Title="VaultGuard 360 Antivirus - Created by Klyvex Studios"
+        Title="VaultGuard 360 Antivirus"
         Height="900" Width="1440" MinWidth="1100" MinHeight="700"
         WindowStartupLocation="CenterScreen"
-        Background="{StaticResource BrushBackground}">
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent">
 
     <Window.DataContext>
         <vm:MainViewModel />
     </Window.DataContext>
 
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="256" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
+    <Border CornerRadius="12" Background="{StaticResource BrushBackground}" BorderBrush="{StaticResource BrushOutline}" BorderThickness="1" ClipToBounds="True">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="256" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
 
-        <!-- Left Sidebar Navigation -->
-        <Border Grid.Column="0" Background="{StaticResource BrushSurface}" BorderBrush="{StaticResource BrushOutline}" BorderThickness="0,0,1,0">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
+            <!-- Left Sidebar Navigation -->
+            <Border Grid.Column="0" Background="{StaticResource BrushSurface}" BorderBrush="{StaticResource BrushOutline}" BorderThickness="0,0,1,0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
 
-                <!-- Brand Header -->
-                <Border Grid.Row="0" Padding="20" BorderBrush="{StaticResource BrushOutline}" BorderThickness="0,0,0,1">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="🛡️" FontSize="26" VerticalAlignment="Center" Margin="0,0,10,0" />
-                        <StackPanel VerticalAlignment="Center">
-                            <TextBlock Text="VaultGuard 360" Foreground="{StaticResource BrushPrimary}" FontSize="18" FontWeight="Bold" />
-                            <TextBlock Text="V-v1.0.0 High-Security" Foreground="{StaticResource BrushTextMuted}" FontFamily="Consolas" FontSize="11" />
-                        </StackPanel>
-                    </StackPanel>
-                </Border>
-
-                <!-- Navigation List -->
-                <StackPanel Grid.Row="1" Margin="8,16">
-                    <Button Content="📊  Dashboard" Style="{StaticResource NavItemButtonStyle}" Click="NavDashboard_Click" />
-                    <Button Content="🛡️  Scan Center" Style="{StaticResource NavItemButtonStyle}" Click="NavScanCenter_Click" />
-                    <Button Content="🔒  Vault Manager" Style="{StaticResource NavItemButtonStyle}" Click="NavVaultManager_Click" />
-                    <Button Content="⚙️  Security Settings" Style="{StaticResource NavItemButtonStyle}" Click="NavSettings_Click" />
-                </StackPanel>
-
-                <!-- Klyvex Attribution Footer -->
-                <Border Grid.Row="2" Padding="16" BorderBrush="{StaticResource BrushOutline}" BorderThickness="0,1,0,0">
-                    <Border Style="{StaticResource CardInnerStyle}" Padding="10">
-                        <StackPanel HorizontalAlignment="Center">
-                            <TextBlock Text="Klyvex Studios" Foreground="{StaticResource BrushPrimary}" FontWeight="Bold" FontSize="12" HorizontalAlignment="Center" />
-                            <TextBlock Text="Antivirus &amp; Immunity Suite" Foreground="{StaticResource BrushTextMuted}" FontSize="10" HorizontalAlignment="Center" Margin="0,2,0,0" />
+                    <!-- Brand Header -->
+                    <Border Grid.Row="0" Padding="20" BorderBrush="{StaticResource BrushOutline}" BorderThickness="0,0,0,1">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="🛡️" FontSize="26" VerticalAlignment="Center" Margin="0,0,10,0" />
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock Text="VaultGuard 360" Foreground="{StaticResource BrushPrimary}" FontSize="18" FontWeight="Bold" />
+                                <TextBlock Text="V-v1.0.0 High-Security" Foreground="{StaticResource BrushTextMuted}" FontFamily="Consolas" FontSize="11" />
+                            </StackPanel>
                         </StackPanel>
                     </Border>
-                </Border>
-            </Grid>
-        </Border>
 
-        <!-- Main Workspace Area -->
-        <Grid Grid.Column="1">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="64" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-
-            <!-- Top Header Bar -->
-            <Border Grid.Row="0" Background="{StaticResource BrushBackground}" BorderBrush="{StaticResource BrushOutline}" BorderThickness="0,0,0,1" Padding="24,0">
-                <DockPanel>
-                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                        <TextBlock Text="✓" Foreground="{StaticResource BrushSecondary}" FontSize="18" FontWeight="Bold" Margin="0,0,8,0" />
-                        <TextBlock Text="Created by Klyvex Studios" Foreground="{StaticResource BrushTextMain}" FontSize="14" FontWeight="Bold" />
+                    <!-- Navigation List -->
+                    <StackPanel Grid.Row="1" Margin="8,16">
+                        <Button Content="📊  Dashboard" Style="{StaticResource NavItemButtonStyle}" Click="NavDashboard_Click" />
+                        <Button Content="🛡️  Scan Center" Style="{StaticResource NavItemButtonStyle}" Click="NavScanCenter_Click" />
+                        <Button Content="🔒  Vault Manager" Style="{StaticResource NavItemButtonStyle}" Click="NavVaultManager_Click" />
+                        <Button Content="⚙️  Security Settings" Style="{StaticResource NavItemButtonStyle}" Click="NavSettings_Click" />
                     </StackPanel>
 
-                    <!-- Top Action Icons & Quick Scan -->
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
-                        <!-- Top-Bar Interactive Icons -->
-                        <Button Content="🔔" FontSize="16" Background="Transparent" BorderThickness="0" Foreground="{StaticResource BrushTextMuted}" Margin="0,0,16,0" Cursor="Hand" Click="ToggleNotifications_Click" ToolTip="Notifications &amp; Alerts" />
-                        <Button Content="🛡️" FontSize="16" Background="Transparent" BorderThickness="0" Foreground="{StaticResource BrushSecondary}" Margin="0,0,16,0" Cursor="Hand" Click="ToggleShield_Click" ToolTip="Real-Time Shield Status" />
-                        <Button Content="🔌" FontSize="16" Background="Transparent" BorderThickness="0" Foreground="{StaticResource BrushSecondary}" Margin="0,0,16,0" Cursor="Hand" Click="ToggleUsb_Click" ToolTip="USB Watchdog Status" />
-                        <Button Content="🐛" FontSize="16" Background="Transparent" BorderThickness="0" Foreground="{StaticResource BrushTextMuted}" Margin="0,0,24,0" Cursor="Hand" Click="ToggleHeuristic_Click" ToolTip="Heuristic Scanner Details" />
-
-                        <Border Width="1" Height="20" Background="{StaticResource BrushOutline}" Margin="0,0,20,0" />
-
-                        <TextBlock Text="SYSTEM IMMUNIZED" Foreground="{StaticResource BrushSecondary}" FontFamily="Consolas" FontSize="12" FontWeight="Bold" VerticalAlignment="Center" Margin="0,0,16,0" />
-                        <Button Content="⚡  QUICK SCAN" Style="{StaticResource PrimaryButtonStyle}" Click="QuickScanTop_Click" />
-                    </StackPanel>
-                </DockPanel>
+                    <!-- Klyvex Attribution Footer -->
+                    <Border Grid.Row="2" Padding="16" BorderBrush="{StaticResource BrushOutline}" BorderThickness="0,1,0,0">
+                        <Border Style="{StaticResource CardInnerStyle}" Padding="10">
+                            <StackPanel HorizontalAlignment="Center">
+                                <TextBlock Text="Klyvex Studios" Foreground="{StaticResource BrushPrimary}" FontWeight="Bold" FontSize="12" HorizontalAlignment="Center" />
+                                <TextBlock Text="Antivirus &amp; Immunity Suite" Foreground="{StaticResource BrushTextMuted}" FontSize="10" HorizontalAlignment="Center" Margin="0,2,0,0" />
+                            </StackPanel>
+                        </Border>
+                    </Border>
+                </Grid>
             </Border>
+
+            <!-- Main Workspace Area -->
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="64" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <!-- Top Header Bar (Draggable) -->
+                <Border Grid.Row="0" Background="{StaticResource BrushBackground}" BorderBrush="{StaticResource BrushOutline}" BorderThickness="0,0,0,1" Padding="24,0" MouseLeftButtonDown="Header_MouseLeftButtonDown">
+                    <DockPanel>
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="✓" Foreground="{StaticResource BrushSecondary}" FontSize="18" FontWeight="Bold" Margin="0,0,8,0" />
+                            <TextBlock Text="Created by Klyvex Studios" Foreground="{StaticResource BrushTextMain}" FontSize="14" FontWeight="Bold" />
+                        </StackPanel>
+
+                        <!-- Top Action Icons & Quick Scan -->
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                            <!-- Top-Bar Interactive Icons -->
+                            <Button Content="🔔" FontSize="16" Background="Transparent" BorderThickness="0" Foreground="{StaticResource BrushTextMuted}" Margin="0,0,16,0" Cursor="Hand" Click="ToggleNotifications_Click" ToolTip="Notifications &amp; Alerts" />
+                            <Button Content="🛡️" FontSize="16" Background="Transparent" BorderThickness="0" Foreground="{StaticResource BrushSecondary}" Margin="0,0,16,0" Cursor="Hand" Click="ToggleShield_Click" ToolTip="Real-Time Shield Status" />
+                            <Button Content="🔌" FontSize="16" Background="Transparent" BorderThickness="0" Foreground="{StaticResource BrushSecondary}" Margin="0,0,16,0" Cursor="Hand" Click="ToggleUsb_Click" ToolTip="USB Watchdog Status" />
+                            <Button Content="🐛" FontSize="16" Background="Transparent" BorderThickness="0" Foreground="{StaticResource BrushTextMuted}" Margin="0,0,24,0" Cursor="Hand" Click="ToggleHeuristic_Click" ToolTip="Heuristic Scanner Details" />
+
+                            <Border Width="1" Height="20" Background="{StaticResource BrushOutline}" Margin="0,0,20,0" />
+
+                            <TextBlock Text="SYSTEM IMMUNIZED" Foreground="{StaticResource BrushSecondary}" FontFamily="Consolas" FontSize="12" FontWeight="Bold" VerticalAlignment="Center" Margin="0,0,16,0" />
+                            <Button Content="⚡  QUICK SCAN" Style="{StaticResource PrimaryButtonStyle}" Click="QuickScanTop_Click" Margin="0,0,16,0" />
+
+                            <!-- Custom Window Action Controls -->
+                            <Button Content="—" FontSize="14" Background="Transparent" Foreground="{StaticResource BrushTextMuted}" BorderThickness="0" Width="36" Height="28" Cursor="Hand" Click="MinimizeWindow_Click" Margin="0,0,4,0" ToolTip="Minimize" />
+                            <Button Content="✕" FontSize="13" Background="Transparent" Foreground="{StaticResource BrushTextMuted}" BorderThickness="0" Width="36" Height="28" Cursor="Hand" Click="CloseWindow_Click" ToolTip="Close" />
+                        </StackPanel>
+                    </DockPanel>
+                </Border>
 
             <!-- Active View Host -->
             <ContentControl Grid.Row="1" Content="{Binding CurrentView}" Margin="24">
@@ -221,4 +228,5 @@
             </Popup>
         </Grid>
     </Grid>
+</Border>
 </Window>

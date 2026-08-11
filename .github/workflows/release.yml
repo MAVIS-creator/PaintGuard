@@ -31,10 +31,10 @@ jobs:
         run: |
           .\Build-App.ps1
 
-      - name: Compile Inno Setup Installer (VaultGuard360_Setup.exe)
+      - name: Compile Custom WPF Installer (VaultGuard360_Setup.exe)
         shell: powershell
         run: |
-          iscc setup.iss
+          .\Build-Installer.ps1
 
       - name: Create GitHub Release & Upload Assets
         uses: softprops/action-gh-release@v2
@@ -46,7 +46,7 @@ jobs:
             *Created by Klyvex Studios*
 
             ### 🚀 Assets Included:
-            - `VaultGuard360_Setup.exe`: Full Windows Installer (Desktop Shortcuts, Auto-Start, Uninstaller)
+            - `VaultGuard360_Setup.exe`: Custom WPF Windows Installer (Desktop Shortcuts, Auto-Start, Uninstaller)
             - `VaultGuard360.exe`: Standalone Native Windows App Host
 
             ### 🔐 Highlights:
@@ -57,7 +57,7 @@ jobs:
           draft: false
           prerelease: false
           files: |
-            Output/VaultGuard360_Setup.exe
+            VaultGuard360_Setup.exe
             VaultGuard360.exe
             icon.ico
         env:

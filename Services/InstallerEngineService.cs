@@ -112,6 +112,26 @@ namespace VaultGuard360.Setup.Services
                         key?.SetValue("VaultGuard360", $"\"{exePath}\" --autostart");
                     }
 
+                    // Windows Add/Remove Programs Registration
+                    try
+                    {
+                        using RegistryKey? uninstallRoot = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall", true) 
+                                                        ?? Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall", true);
+                        if (uninstallRoot != null)
+                        {
+                            using RegistryKey appKey = uninstallRoot.CreateSubKey("VaultGuard360");
+                            appKey.SetValue("DisplayName", "VaultGuard 360 Security Suite");
+                            appKey.SetValue("DisplayVersion", "1.0.0");
+                            appKey.SetValue("Publisher", "Klyvex Studios");
+                            appKey.SetValue("InstallLocation", DefaultInstallPath);
+                            appKey.SetValue("DisplayIcon", exePath);
+                            appKey.SetValue("UninstallString", $"\"{exePath}\" --uninstall");
+                            appKey.SetValue("NoModify", 1);
+                            appKey.SetValue("NoRepair", 1);
+                        }
+                    }
+                    catch { }
+
                     // Step 5: Configuring protection
                     OnStepStatusUpdated?.Invoke("Step5", true);
                     OnProgressChanged?.Invoke(100, "Installation complete. System immunized.");
