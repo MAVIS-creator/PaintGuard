@@ -10,36 +10,28 @@
     <ApplicationIcon>icon.ico</ApplicationIcon>
     <AssemblyName>VaultGuard360_Setup</AssemblyName>
     <RootNamespace>VaultGuard360.Setup</RootNamespace>
+    <StartupObject>VaultGuard360.Setup.SetupProgram</StartupObject>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
     <Version>1.0.0</Version>
     <Authors>Klyvex Studios</Authors>
     <Company>Klyvex Studios Security Team</Company>
     <Product>VaultGuard 360 Custom Installer</Product>
     <Copyright>Copyright (c) 2026 Klyvex Studios</Copyright>
-    <StartupObject>VaultGuard360.Setup.SetupApp</StartupObject>
+    <!-- Disable all auto-discovery to avoid conflicts with main app -->
+    <EnableDefaultApplicationDefinition>false</EnableDefaultApplicationDefinition>
+    <EnableDefaultPageItems>false</EnableDefaultPageItems>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
   </PropertyGroup>
 
-  <!-- Exclude Main Antivirus App Files from Setup Build -->
+  <!-- Only include setup-specific files -->
   <ItemGroup>
-    <Compile Remove="App.xaml.cs" />
-    <Compile Remove="MainWindow.xaml.cs" />
-    <Compile Remove="Views\**" />
-    <Compile Remove="ViewModels\**" />
-    <Compile Remove="Services\EngineService.cs" />
-    <Compile Remove="Services\NotificationService.cs" />
-    <Compile Remove="Services\UsbWatcherService.cs" />
-    <Page Remove="App.xaml" />
-    <Page Remove="MainWindow.xaml" />
-    <Page Remove="Views\**" />
-  </ItemGroup>
-
-  <!-- WPF Application Entry -->
-  <ItemGroup>
-    <ApplicationDefinition Remove="App.xaml" />
-    <ApplicationDefinition Include="SetupApp.xaml" />
+    <Compile Include="Services\InstallerEngineService.cs" />
+    <Compile Include="SetupProgram.cs" />
   </ItemGroup>
 
   <ItemGroup>
     <Resource Include="icon.ico" />
+    <EmbeddedResource Include="payload.zip" Condition="Exists('payload.zip')" />
   </ItemGroup>
 
 </Project>

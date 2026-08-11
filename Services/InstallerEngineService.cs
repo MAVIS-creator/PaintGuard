@@ -42,13 +42,45 @@ namespace VaultGuard360.Setup.Services
                     OnStepStatusUpdated?.Invoke("Step2", true);
                     OnProgressChanged?.Invoke(40, "Installing core security engine & WPF binaries...");
                     
-                    string sourcePublishDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "bin", "Publish");
-                    if (!Directory.Exists(sourcePublishDir))
-                    {
-                        sourcePublishDir = AppDomain.CurrentDomain.BaseDirectory;
-                    }
+                    // Check if embedded payload.zip exists in assembly resources
+                    var assembly = typeof(InstallerEngineService).Assembly;
+                    using var payloadStream = assembly.GetManifestResourceStream("VaultGuard360.Setup.payload.zip");
 
-                    CopyDirectoryContents(sourcePublishDir, DefaultInstallPath);
+                    if (payloadStream != null)
+                    {
+                        using var archive = new ZipArchive(payloadStream, ZipArchiveMode.Read);
+                        foreach (var entry in archive.Entries)
+                        {
+                            string destinationPath = Path.GetFullPath(Path.Combine(DefaultInstallPath, entry.FullName));
+                            if (destinationPath.StartsWith(DefaultInstallPath, StringComparison.OrdinalIgnoreCase))
+                            {
+                                if (string.IsNullOrEmpty(entry.Name))
+                                {
+                                    Directory.CreateDirectory(destinationPath);
+                                }
+                                else
+                                {
+                                    string? parentDir = Path.GetDirectoryName(destinationPath);
+                                    if (!string.IsNullOrEmpty(parentDir)) Directory.CreateDirectory(parentDir);
+                                    entry.ExtractToFile(destinationPath, overwrite: true);
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        string sourcePublishDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "bin", "Publish");
+                        if (!Directory.Exists(sourcePublishDir))
+                        {
+                            sourcePublishDir = Path.Combine(Environment.CurrentDirectory, "bin", "Publish");
+                        }
+                        if (!Directory.Exists(sourcePublishDir))
+                        {
+                            sourcePublishDir = AppDomain.CurrentDomain.BaseDirectory;
+                        }
+
+                        CopyDirectoryContents(sourcePublishDir, DefaultInstallPath);
+                    }
                     Task.Delay(500).Wait();
 
                     // Step 3: Installing protection modules

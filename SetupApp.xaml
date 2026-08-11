@@ -1,13 +1,70 @@
 <Application x:Class="VaultGuard360.Setup.SetupApp"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             StartupUri="InstallerWindow.xaml">
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Application.Resources>
         <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="UI/Themes/Colors.xaml" />
-                <ResourceDictionary Source="UI/Themes/Controls.xaml" />
-            </ResourceDictionary.MergedDictionaries>
+            <!-- Inline all theme resources -->
+            <SolidColorBrush x:Key="BrushBackground" Color="#0B1326" />
+            <SolidColorBrush x:Key="BrushSurface" Color="#171F33" />
+            <SolidColorBrush x:Key="BrushSurfaceHigh" Color="#222A3D" />
+            <SolidColorBrush x:Key="BrushSurfaceVariant" Color="#2D3449" />
+            <SolidColorBrush x:Key="BrushSurfaceLowest" Color="#060E20" />
+            <SolidColorBrush x:Key="BrushPrimary" Color="#B4C5FF" />
+            <SolidColorBrush x:Key="BrushPrimaryContainer" Color="#2563EB" />
+            <SolidColorBrush x:Key="BrushSecondary" Color="#68DBA9" />
+            <SolidColorBrush x:Key="BrushSecondaryContainer" Color="#25A475" />
+            <SolidColorBrush x:Key="BrushTertiary" Color="#FFB77D" />
+            <SolidColorBrush x:Key="BrushError" Color="#FFB4AB" />
+            <SolidColorBrush x:Key="BrushOutline" Color="#434655" />
+            <SolidColorBrush x:Key="BrushTextMain" Color="#DAE2FD" />
+            <SolidColorBrush x:Key="BrushTextMuted" Color="#C3C6D7" />
+
+            <!-- Stitch Card Style -->
+            <Style x:Key="StitchCardStyle" TargetType="Border">
+                <Setter Property="Background" Value="{StaticResource BrushSurface}" />
+                <Setter Property="BorderBrush" Value="{StaticResource BrushOutline}" />
+                <Setter Property="BorderThickness" Value="1" />
+                <Setter Property="CornerRadius" Value="10" />
+                <Setter Property="Padding" Value="20" />
+            </Style>
+
+            <!-- Card Inner Panel -->
+            <Style x:Key="CardInnerStyle" TargetType="Border">
+                <Setter Property="Background" Value="{StaticResource BrushSurfaceVariant}" />
+                <Setter Property="BorderBrush" Value="{StaticResource BrushOutline}" />
+                <Setter Property="BorderThickness" Value="1" />
+                <Setter Property="CornerRadius" Value="6" />
+                <Setter Property="Padding" Value="12" />
+            </Style>
+
+            <!-- Primary Action Button -->
+            <Style x:Key="PrimaryButtonStyle" TargetType="Button">
+                <Setter Property="Background" Value="{StaticResource BrushPrimaryContainer}" />
+                <Setter Property="Foreground" Value="White" />
+                <Setter Property="FontWeight" Value="Bold" />
+                <Setter Property="FontSize" Value="12" />
+                <Setter Property="Padding" Value="16,10" />
+                <Setter Property="BorderThickness" Value="0" />
+                <Setter Property="Cursor" Value="Hand" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="border" Background="{TemplateBinding Background}" CornerRadius="6" Padding="{TemplateBinding Padding}">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="border" Property="Background" Value="{StaticResource BrushPrimary}" />
+                                    <Setter Property="Foreground" Value="#002A78" />
+                                </Trigger>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter TargetName="border" Property="Background" Value="#1E40AF" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

@@ -3,8 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="VaultGuard 360 - Custom Installer"
         Height="620" Width="960" MinWidth="850" MinHeight="550"
-        WindowStartupLocation="CenterScreen" WindowStyle="None" AllowsTransparency="True"
-        Background="{StaticResource BrushBackground}">
+        WindowStartupLocation="CenterScreen" WindowStyle="SingleBorderWindow"
+        Background="#0B1326">
 
     <Border BorderBrush="{StaticResource BrushOutline}" BorderThickness="1" CornerRadius="12">
         <Grid>
