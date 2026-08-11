@@ -28,7 +28,8 @@ namespace VaultGuard360
             
             bool isAutoStart = args != null && Array.Exists(args, a => a.Equals("--autostart", StringComparison.OrdinalIgnoreCase));
             
-            using (Mutex mutex = new Mutex(true, "Global\\VaultGuard_SingleInstance_Mutex", out bool createdNew))
+            bool createdNew;
+            using (Mutex mutex = new Mutex(true, "Global\\VaultGuard_SingleInstance_Mutex", out createdNew))
             {
                 if (!createdNew)
                 {
@@ -467,7 +468,7 @@ namespace VaultGuard360
                 Cursor = Cursors.Hand
             };
             btnAction.FlatAppearance.BorderSize = 0;
-            btnAction.Click += (s, e) => { onClickAction?.Invoke(); this.Close(); };
+            btnAction.Click += (s, e) => { if (onClickAction != null) onClickAction(); this.Close(); };
 
             mainPanel.Controls.Add(titleLbl);
             mainPanel.Controls.Add(msgLbl);

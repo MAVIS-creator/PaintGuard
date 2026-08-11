@@ -41,7 +41,7 @@ try {
     git fetch origin
 
     Write-Host "`n[+] Syncing with remote main branch (allowing unrelated histories)..." -ForegroundColor Cyan
-    git pull origin main --allow-unrelated-histories --no-rebase -m "Merge remote repository history"
+    git pull origin main --allow-unrelated-histories --no-rebase --no-edit
 
     Write-Host "`nBranch Status:" -ForegroundColor Yellow
     git status -s

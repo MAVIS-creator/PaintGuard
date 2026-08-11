@@ -10,10 +10,6 @@ echo.
 
 cd /d "%~dp0"
 
-echo [1/4] Linking Git Repository...
-powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0Update-GitRemote.ps1"
-echo.
-
 echo [2/4] Generating Icon and Compiling VaultGuard360.exe...
 powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0Build-App.ps1"
 echo.
