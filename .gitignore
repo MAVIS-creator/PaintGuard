@@ -24,3 +24,10 @@ Desktop.ini
 $RECYCLE.BIN/
 *.stackdump
 /stitch_vaultguard*
+
+# Compiled Binaries & Release Output
+/Output/
+VaultGuard360.exe
+*.exe
+*.obj
+*.pdb

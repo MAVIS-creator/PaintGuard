@@ -846,6 +846,22 @@
             }
         }
 
+        async function checkForGitHubUpdates() {
+            try {
+                const res = await fetch('https://api.github.com/repos/MAVIS-creator/PaintGuard/releases/latest', {
+                    headers: { 'User-Agent': 'VaultGuard360-UI' }
+                });
+                if (res.ok) {
+                    const release = await res.json();
+                    if (release.tag_name && release.tag_name !== 'v2.5.0') {
+                        showThreatToast(`Update Available: ${release.tag_name}`, `A newer version of VaultGuard 360 (${release.tag_name}) is available on GitHub. Click to view release download page.`, 'reports');
+                        logConsole(`[UPDATE] New version ${release.tag_name} available at https://github.com/MAVIS-creator/PaintGuard/releases`, 'warn');
+                    }
+                }
+            } catch (err) {}
+        }
+        setTimeout(checkForGitHubUpdates, 3000);
+
         async function runOneClickRemediation(targetOverride) {
             const dry = isDryRun();
             const selectEl = document.getElementById('remediationTargetSelect');

@@ -1,0 +1,64 @@
+name: Build & Publish GitHub Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Build & Release VaultGuard 360
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+
+      - name: Setup Inno Setup Compiler
+        uses: sborgert/setup-inno-setup@v1
+
+      - name: Generate High-Res Icon
+        shell: powershell
+        run: |
+          .\ConvertLogoToIcon.ps1
+
+      - name: Compile VaultGuard360 Desktop App (.exe)
+        shell: powershell
+        run: |
+          .\Build-App.ps1
+
+      - name: Compile Inno Setup Installer (VaultGuard360_Setup.exe)
+        shell: powershell
+        run: |
+          iscc setup.iss
+
+      - name: Create GitHub Release & Upload Assets
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: VaultGuard 360 Release ${{ github.ref_name }}
+          body: |
+            ## 🛡️ VaultGuard 360 Antivirus & Vaccine Suite Release ${{ github.ref_name }}
+            *Created by Klyvex Studios*
+
+            ### 🚀 Assets Included:
+            - `VaultGuard360_Setup.exe`: Full Windows Installer (Desktop Shortcuts, Auto-Start, Uninstaller)
+            - `VaultGuard360.exe`: Standalone Native Windows App Host
+
+            ### 🔐 Highlights:
+            - Multi-Family Heuristic Scanner (Paint/Geacata, Shortcut Worms, Expiro PE Infector)
+            - Real-Time Animated Toast Popups & System Tray Monitor
+            - Dual-Compartment Clean-File & Quarantine Vault
+            - USB Watchdog & Immunization Traps
+          draft: false
+          prerelease: false
+          files: |
+            Output/VaultGuard360_Setup.exe
+            VaultGuard360.exe
+            icon.ico
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -139,6 +139,7 @@ namespace VaultGuard360
             trayMenu.Items.Add(autoStartMenuItem);
 
             trayMenu.Items.Add("About VaultGuard 360", null, (s, e) => ShowAbout());
+            trayMenu.Items.Add("Check for Updates...", null, (s, e) => CheckForUpdates(true));
             trayMenu.Items.Add(new ToolStripSeparator());
             trayMenu.Items.Add("Exit Application", null, (s, e) => ExitApp());
 
@@ -158,6 +159,73 @@ namespace VaultGuard360
             };
 
             trayIcon.DoubleClick += (s, e) => RestoreWindow();
+            
+            // Auto-check for updates silently on startup
+            CheckForUpdates(false);
+        }
+
+        private void CheckForUpdates(bool showPromptIfLatest)
+        {
+            Thread updateThread = new Thread(() =>
+            {
+                try
+                {
+                    ServicePointManager.SecurityProtocol = (SecurityProtocolType)3072; // TLS 1.2
+                    HttpWebRequest req = (HttpWebRequest)WebRequest.Create("https://api.github.com/repos/MAVIS-creator/PaintGuard/releases/latest");
+                    req.UserAgent = "VaultGuard360-AppHost/2.5.0";
+                    req.Timeout = 4000;
+                    using (HttpWebResponse resp = (HttpWebResponse)req.GetResponse())
+                    {
+                        using (StreamReader sr = new StreamReader(resp.GetResponseStream()))
+                        {
+                            string json = sr.ReadToEnd();
+                            int tagIdx = json.IndexOf("\"tag_name\":");
+                            if (tagIdx != -1)
+                            {
+                                int start = json.IndexOf("\"", tagIdx + 11) + 1;
+                                int end = json.IndexOf("\"", start);
+                                string latestTag = json.Substring(start, end - start);
+                                
+                                if (!latestTag.Equals("v2.5.0", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    this.Invoke((Action)(() =>
+                                    {
+                                        trayIcon.ShowBalloonTip(5000, "VaultGuard 360 Update Available", "Version " + latestTag + " is ready on GitHub. Created by Klyvex Studios.", ToolTipIcon.Info);
+                                        ShowAnimatedUpdateNotification("VaultGuard 360 Update Available", "A newer version (" + latestTag + ") is available on GitHub Releases.");
+                                    }));
+                                }
+                                else if (showPromptIfLatest)
+                                {
+                                    this.Invoke((Action)(() =>
+                                    {
+                                        MessageBox.Show("You are running the latest version of VaultGuard 360 (v2.5.0).", "VaultGuard 360 Auto-Update", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                    }));
+                                }
+                            }
+                        }
+                    }
+                }
+                catch
+                {
+                    if (showPromptIfLatest)
+                    {
+                        this.Invoke((Action)(() =>
+                        {
+                            MessageBox.Show("Could not check for updates right now. Please check your internet connection.", "VaultGuard 360 Update", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        }));
+                    }
+                }
+            });
+            updateThread.IsBackground = true;
+            updateThread.Start();
+        }
+
+        public void ShowAnimatedUpdateNotification(string title, string message)
+        {
+            ThreatPopupForm popup = new ThreatPopupForm(title, message, () => {
+                try { Process.Start("https://github.com/MAVIS-creator/PaintGuard/releases"); } catch {}
+            });
+            popup.Show();
         }
 
         private void StartBackendEngine()

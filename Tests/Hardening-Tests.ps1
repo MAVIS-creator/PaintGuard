@@ -58,6 +58,13 @@ $engineContent = Get-Content (Join-Path $AppDir "PaintGuardEngine.ps1") -Raw
 Assert-Test ($engineContent -match "Authorization") "Engine Enforces Authorization Header Checks"
 Assert-Test ($engineContent -match "Bearer") "Engine Enforces Cryptographic Bearer Token Validation"
 
+# --- TEST 6: GitHub Release & Auto-Update Engine ---
+Write-Host "`n[6] Auditing GitHub Releases & Auto-Update Engine..." -ForegroundColor Cyan
+Assert-Test (Test-Path (Join-Path $AppDir ".github\workflows\release.yml")) "GitHub Actions Release Workflow Exists"
+Assert-Test (Test-Path (Join-Path $AppDir "Publish-Release.ps1")) "Local Release Publisher Script Exists"
+Assert-Test ($csContent -match "CheckForUpdates") "C# Desktop Host Implements Auto-Update Checker"
+Assert-Test ($uiContent -match "checkForGitHubUpdates") "UI HTML Implements Auto-Update Checker"
+
 # --- SUMMARY REPORT ---
 Write-Host "`n================================================================================" -ForegroundColor Cyan
 $summaryColor = if ($FailCount -eq 0) { "Green" } else { "Red" }
