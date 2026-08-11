@@ -26,17 +26,17 @@
 
 ```mermaid
 graph TD
-    UI[VaultGuard 360 Desktop UI / Edge App Window] -->|Bearer Token HTTP REST| HOST[PaintGuardEngine.ps1 REST Host]
-    CLI[paintguard-cli.ps1] -->|Direct Cmdlet Calls| DISPATCHER[VaultGuard.Detection.psm1 Dispatcher]
+    UI["VaultGuard 360 Desktop UI"] -->|Bearer Token HTTP REST| HOST["PaintGuardEngine.ps1 REST Host"]
+    CLI["paintguard-cli.ps1"] -->|Direct Cmdlet Calls| DISPATCHER["VaultGuard.Detection.psm1 Dispatcher"]
 
-    subgraph ENGINE [VaultGuard Core Modules]
-        DET_P[VaultGuard.PaintGeacata.psm1<br/>Paint / Geacata Detector]
-        DET_S[VaultGuard.ShortcutWorm.psm1<br/>Shortcut Worm Detector]
-        DET_E[VaultGuard.Expiro.psm1<br/>Expiro PE Inspector]
-        VAULT[VaultGuard.Vault.psm1<br/>Dual Vault & Self-Protection]
-        PER[VaultGuard.Persistence.psm1<br/>Registry, Tasks, WMI & Startup Audit]
-        VAC[VaultGuard.Vaccine.psm1<br/>AutoRun Policy & USB Watcher Service]
-        AUD[VaultGuard.Audit.psm1<br/>JSON Logger & Executive HTML Report]
+    subgraph ENGINE ["VaultGuard Core Modules"]
+        DET_P["VaultGuard.PaintGeacata.psm1<br/>Paint / Geacata Detector"]
+        DET_S["VaultGuard.ShortcutWorm.psm1<br/>Shortcut Worm Detector"]
+        DET_E["VaultGuard.Expiro.psm1<br/>Expiro PE Inspector"]
+        VAULT["VaultGuard.Vault.psm1<br/>Dual Vault & Self-Protection"]
+        PER["VaultGuard.Persistence.psm1<br/>Registry, Tasks, WMI & Startup Audit"]
+        VAC["VaultGuard.Vaccine.psm1<br/>AutoRun Policy & USB Watcher Service"]
+        AUD["VaultGuard.Audit.psm1<br/>JSON Logger & Executive Report"]
     end
 
     DISPATCHER --> DET_P
@@ -47,11 +47,11 @@ graph TD
     DET_S --> VAULT
     DET_E --> VAULT
 
-    VAULT -->|Hardened ACL Storage| BASELINE[(C:\ProgramData\VaultGuard\Baseline)]
-    VAULT -->|Zero-Data-Loss Storage| QUARANTINE[(C:\ProgramData\VaultGuard\Quarantine)]
-    VAULT -->|Self-Healing Store| GOLDEN[(C:\ProgramData\VaultGuard\GoldenVault)]
-    VAC -->|VolumeChangeEvent| USB[Real-Time USB Auto-Vaccine Service]
-    AUD -->|Export| RPT[Executive Incident Report .html]
+    VAULT -->|Hardened ACL Storage| BASELINE[("C:/ProgramData/VaultGuard/Baseline")]
+    VAULT -->|Zero-Data-Loss Storage| QUARANTINE[("C:/ProgramData/VaultGuard/Quarantine")]
+    VAULT -->|Self-Healing Store| GOLDEN[("C:/ProgramData/VaultGuard/GoldenVault")]
+    VAC -->|VolumeChangeEvent| USB["Real-Time USB Auto-Vaccine Service"]
+    AUD -->|Export| RPT["Executive Incident Report HTML"]
 ```
 
 ---
