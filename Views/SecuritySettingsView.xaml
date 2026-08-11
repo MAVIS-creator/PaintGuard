@@ -1,0 +1,82 @@
+<UserControl x:Class="VaultGuard360.Views.SecuritySettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="0,0,0,20">
+            <DockPanel Margin="0,0,0,20">
+                <StackPanel>
+                    <TextBlock Text="Security Configuration" Foreground="{StaticResource BrushPrimary}" FontSize="22" FontWeight="Bold" />
+                    <TextBlock Text="Manage core defense mechanisms, API bindings, and immunization protocols." Foreground="{StaticResource BrushTextMuted}" FontSize="12" Margin="0,2,0,0" />
+                </StackPanel>
+            </DockPanel>
+
+            <Grid Margin="0,0,0,20">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="20" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <!-- Vaccine Guard -->
+                <Border Grid.Column="0" Style="{StaticResource StitchCardStyle}">
+                    <StackPanel>
+                        <DockPanel Margin="0,0,0,16">
+                            <TextBlock Text="Vaccine Guard" Foreground="{StaticResource BrushTextMain}" FontSize="15" FontWeight="Bold" />
+                            <Border Background="rgba(104, 219, 169, 0.1)" CornerRadius="4" Padding="6,2" HorizontalAlignment="Right">
+                                <TextBlock Text="ENFORCED" Foreground="{StaticResource BrushSecondary}" FontSize="10" FontWeight="Bold" FontFamily="Consolas" />
+                            </Border>
+                        </DockPanel>
+
+                        <Border Style="{StaticResource CardInnerStyle}" Margin="0,0,0,10">
+                            <DockPanel>
+                                <StackPanel Width="320">
+                                    <TextBlock Text="USB Auto-Vaccine Service" Foreground="{StaticResource BrushTextMain}" FontSize="13" FontWeight="Bold" />
+                                    <TextBlock Text="Injects decoy signatures and autorun.inf dummy traps." Foreground="{StaticResource BrushTextMuted}" FontSize="11" TextWrapping="Wrap" Margin="0,2,0,0" />
+                                </StackPanel>
+                                <CheckBox IsChecked="{Binding IsUsbVaccineEnabled}" HorizontalAlignment="Right" VerticalAlignment="Center" />
+                            </DockPanel>
+                        </Border>
+
+                        <Border Style="{StaticResource CardInnerStyle}">
+                            <DockPanel>
+                                <StackPanel Width="320">
+                                    <TextBlock Text="AutoRun Policy Hardening" Foreground="{StaticResource BrushTextMain}" FontSize="13" FontWeight="Bold" />
+                                    <TextBlock Text="Forces Registry NoDriveTypeAutoRun to 0xFF." Foreground="{StaticResource BrushTextMuted}" FontSize="11" TextWrapping="Wrap" Margin="0,2,0,0" />
+                                </StackPanel>
+                                <CheckBox IsChecked="{Binding IsAutoRunHardened}" HorizontalAlignment="Right" VerticalAlignment="Center" />
+                            </DockPanel>
+                        </Border>
+                    </StackPanel>
+                </Border>
+
+                <!-- Publisher & REST API Details -->
+                <Border Grid.Column="2" Style="{StaticResource StitchCardStyle}">
+                    <StackPanel>
+                        <TextBlock Text="App Publisher &amp; API Binding" Foreground="{StaticResource BrushTextMain}" FontSize="15" FontWeight="Bold" Margin="0,0,0,16" />
+
+                        <Border Style="{StaticResource CardInnerStyle}">
+                            <StackPanel>
+                                <DockPanel Margin="0,0,0,8">
+                                    <TextBlock Text="Suite Name:" Foreground="{StaticResource BrushTextMuted}" FontSize="12" />
+                                    <TextBlock Text="VaultGuard 360" Foreground="{StaticResource BrushTextMain}" FontWeight="Bold" FontSize="12" HorizontalAlignment="Right" />
+                                </DockPanel>
+                                <DockPanel Margin="0,0,0,8">
+                                    <TextBlock Text="Version:" Foreground="{StaticResource BrushTextMuted}" FontSize="12" />
+                                    <TextBlock Text="v1.0.0" Foreground="{StaticResource BrushPrimary}" FontWeight="Bold" FontSize="12" HorizontalAlignment="Right" />
+                                </DockPanel>
+                                <DockPanel Margin="0,0,0,8">
+                                    <TextBlock Text="Created By:" Foreground="{StaticResource BrushTextMuted}" FontSize="12" />
+                                    <TextBlock Text="Klyvex Studios" Foreground="{StaticResource BrushSecondary}" FontWeight="Bold" FontSize="12" HorizontalAlignment="Right" />
+                                </DockPanel>
+                                <DockPanel>
+                                    <TextBlock Text="REST Binding:" Foreground="{StaticResource BrushTextMuted}" FontSize="12" />
+                                    <TextBlock Text="127.0.0.1:18443" Foreground="{StaticResource BrushTextMain}" FontFamily="Consolas" FontSize="12" HorizontalAlignment="Right" />
+                                </DockPanel>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

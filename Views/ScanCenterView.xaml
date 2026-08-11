@@ -1,0 +1,94 @@
+<UserControl x:Class="VaultGuard360.Views.ScanCenterView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <DockPanel Grid.Row="0" Margin="0,0,0,20">
+            <StackPanel>
+                <TextBlock Text="Active Scan Center" Foreground="{StaticResource BrushPrimary}" FontSize="22" FontWeight="Bold" />
+                <TextBlock Text="Module: Deep Inspection Engine v4.2" Foreground="{StaticResource BrushTextMuted}" FontSize="12" Margin="0,2,0,0" />
+            </StackPanel>
+        </DockPanel>
+
+        <!-- Main Content -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3.5*" />
+                <ColumnDefinition Width="20" />
+                <ColumnDefinition Width="6.5*" />
+            </Grid.ColumnDefinitions>
+
+            <!-- Selection & Verdict Column -->
+            <StackPanel Grid.Column="0">
+                <Border Style="{StaticResource StitchCardStyle}" Margin="0,0,0,16">
+                    <StackPanel>
+                        <TextBlock Text="Selection Area" Foreground="{StaticResource BrushTextMain}" FontSize="14" FontWeight="Bold" Margin="0,0,0,12" />
+                        <TextBox x:Name="PathBox" Text="{Binding ScanPath, UpdateSourceTrigger=PropertyChanged}" Background="{StaticResource BrushSurfaceVariant}" Foreground="{StaticResource BrushTextMain}" BorderBrush="{StaticResource BrushOutline}" Padding="8" FontFamily="Consolas" FontSize="12" Margin="0,0,0,12" />
+                        
+                        <Grid Margin="0,0,0,12">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="8" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Button Grid.Column="0" Content="Drive C:\" Style="{StaticResource SecondaryButtonStyle}" Click="SetPathC_Click" />
+                            <Button Grid.Column="2" Content="Drive D:\" Style="{StaticResource SecondaryButtonStyle}" Click="SetPathD_Click" />
+                        </Grid>
+
+                        <Button Content="📡  START HEURISTIC SCAN" Style="{StaticResource PrimaryButtonStyle}" Click="StartScan_Click" HorizontalAlignment="Stretch" Padding="12" />
+                    </StackPanel>
+                </Border>
+
+                <Border Style="{StaticResource StitchCardStyle}">
+                    <StackPanel>
+                        <TextBlock Text="Real-Time Verdict" Foreground="{StaticResource BrushTextMain}" FontSize="14" FontWeight="Bold" Margin="0,0,0,14" />
+
+                        <Border Style="{StaticResource CardInnerStyle}" BorderBrush="{StaticResource BrushSecondary}" BorderThickness="4,1,1,1" Margin="0,0,0,10">
+                            <DockPanel>
+                                <TextBlock Text="CLEAN" Foreground="{StaticResource BrushSecondary}" FontWeight="Bold" FontSize="12" />
+                                <TextBlock Text="{Binding CleanCount}" Foreground="{StaticResource BrushTextMain}" FontWeight="Bold" FontSize="15" HorizontalAlignment="Right" />
+                            </DockPanel>
+                        </Border>
+
+                        <Border Style="{StaticResource CardInnerStyle}" BorderBrush="{StaticResource BrushTertiary}" BorderThickness="4,1,1,1" Margin="0,0,0,10">
+                            <DockPanel>
+                                <TextBlock Text="SUSPICIOUS" Foreground="{StaticResource BrushTertiary}" FontWeight="Bold" FontSize="12" />
+                                <TextBlock Text="{Binding SuspiciousCount}" Foreground="{StaticResource BrushTertiary}" FontWeight="Bold" FontSize="15" HorizontalAlignment="Right" />
+                            </DockPanel>
+                        </Border>
+
+                        <Border Style="{StaticResource CardInnerStyle}" BorderBrush="{StaticResource BrushError}" BorderThickness="4,1,1,1">
+                            <DockPanel>
+                                <TextBlock Text="INFECTED" Foreground="{StaticResource BrushError}" FontWeight="Bold" FontSize="12" />
+                                <TextBlock Text="{Binding InfectedCount}" Foreground="{StaticResource BrushError}" FontWeight="Bold" FontSize="15" HorizontalAlignment="Right" />
+                            </DockPanel>
+                        </Border>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+
+            <!-- Technical Terminal Output -->
+            <Border Grid.Column="2" Style="{StaticResource StitchCardStyle}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" Text="Technical Terminal Output" Foreground="{StaticResource BrushTextMain}" FontSize="14" FontWeight="Bold" Margin="0,0,0,12" />
+
+                    <Border Grid.Row="1" Background="{StaticResource BrushSurfaceLowest}" BorderBrush="{StaticResource BrushOutline}" BorderThickness="1" CornerRadius="6" Padding="12">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                            <TextBlock Text="{Binding LogOutput}" Foreground="{StaticResource BrushSecondary}" FontFamily="Consolas" FontSize="12" TextWrapping="Wrap" />
+                        </ScrollViewer>
+                    </Border>
+                </Grid>
+            </Border>
+        </Grid>
+    </Grid>
+</UserControl>

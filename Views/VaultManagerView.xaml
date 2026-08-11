@@ -1,0 +1,87 @@
+<UserControl x:Class="VaultGuard360.Views.VaultManagerView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <DockPanel Grid.Row="0" Margin="0,0,0,20">
+            <StackPanel>
+                <TextBlock Text="Vault Manager" Foreground="{StaticResource BrushPrimary}" FontSize="22" FontWeight="Bold" />
+                <TextBlock Text="Baseline Golden Store &amp; Isolated Payload Manager" Foreground="{StaticResource BrushTextMuted}" FontSize="12" Margin="0,2,0,0" />
+            </StackPanel>
+
+            <Button Content="🔄  SYNC VAULT ITEMS" Style="{StaticResource SecondaryButtonStyle}" HorizontalAlignment="Right" Click="SyncVault_Click" />
+        </DockPanel>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="20" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <!-- Baseline Golden Vault -->
+            <Border Grid.Column="0" Style="{StaticResource StitchCardStyle}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <DockPanel Grid.Row="0" Margin="0,0,0,12">
+                        <TextBlock Text="Baseline Vault" Foreground="{StaticResource BrushPrimary}" FontSize="15" FontWeight="Bold" />
+                        <Border Background="rgba(104, 219, 169, 0.1)" CornerRadius="4" Padding="6,2" HorizontalAlignment="Right">
+                            <TextBlock Text="STATUS: VERIFIED" Foreground="{StaticResource BrushSecondary}" FontSize="10" FontWeight="Bold" FontFamily="Consolas" />
+                        </Border>
+                    </DockPanel>
+
+                    <TextBlock Grid.Row="1" Text="Clean golden binaries stored in read-only ACL storage." Foreground="{StaticResource BrushTextMuted}" FontSize="12" Margin="0,0,0,16" />
+
+                    <ListBox Grid.Row="2" ItemsSource="{Binding BaselineAssets}" Background="Transparent" BorderThickness="0">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Border Style="{StaticResource CardInnerStyle}" Margin="0,0,0,8">
+                                    <DockPanel>
+                                        <StackPanel>
+                                            <TextBlock Text="{Binding Name}" Foreground="{StaticResource BrushTextMain}" FontSize="12" FontWeight="Bold" />
+                                            <TextBlock Text="{Binding Hash}" Foreground="{StaticResource BrushTextMuted}" FontFamily="Consolas" FontSize="10" Margin="0,2,0,0" />
+                                        </StackPanel>
+                                        <TextBlock Text="{Binding Status}" Foreground="{StaticResource BrushSecondary}" FontWeight="Bold" FontSize="11" HorizontalAlignment="Right" VerticalAlignment="Center" />
+                                    </DockPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Grid>
+            </Border>
+
+            <!-- Quarantine Vault -->
+            <Border Grid.Column="2" Style="{StaticResource StitchCardStyle}" BorderBrush="{StaticResource BrushError}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <DockPanel Grid.Row="0" Margin="0,0,0,12">
+                        <TextBlock Text="Quarantine Isolated Vault" Foreground="{StaticResource BrushError}" FontSize="15" FontWeight="Bold" />
+                        <Border Background="rgba(255, 180, 171, 0.1)" CornerRadius="4" Padding="6,2" HorizontalAlignment="Right">
+                            <TextBlock Text="0 PAYLOADS" Foreground="{StaticResource BrushError}" FontSize="10" FontWeight="Bold" FontFamily="Consolas" />
+                        </Border>
+                    </DockPanel>
+
+                    <TextBlock Grid.Row="1" Text="Isolated malware binaries isolated in dual zero-trust vault." Foreground="{StaticResource BrushTextMuted}" FontSize="12" Margin="0,0,0,16" />
+
+                    <Border Grid.Row="2" Style="{StaticResource CardInnerStyle}" VerticalAlignment="Top">
+                        <TextBlock Text="No infected items isolated in quarantine vault." Foreground="{StaticResource BrushTextMuted}" FontSize="12" HorizontalAlignment="Center" Margin="0,20" />
+                    </Border>
+                </Grid>
+            </Border>
+        </Grid>
+    </Grid>
+</UserControl>

@@ -38,20 +38,8 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 Name: "autostart"; Description: "Run VaultGuard 360 automatically when Windows starts"; GroupDescription: "Startup Options:"
 
 [Files]
-Source: "VaultGuard360.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "PaintGuardEngine.ps1"; DestDir: "{app}"; Flags: ignoreversion
-Source: "Start-PaintGuard.ps1"; DestDir: "{app}"; Flags: ignoreversion
-Source: "VaultGuard 360 UI.html"; DestDir: "{app}"; Flags: ignoreversion
+Source: "bin\Publish\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "icon.ico"; DestDir: "{app}"; Flags: ignoreversion
-Source: "icon.svg"; DestDir: "{app}"; Flags: ignoreversion
-Source: "Attributes.ps1"; DestDir: "{app}"; Flags: ignoreversion
-Source: "Audit-PaintVirus.ps1"; DestDir: "{app}"; Flags: ignoreversion
-Source: "Final-Clearance-Check.ps1"; DestDir: "{app}"; Flags: ignoreversion
-Source: "Paint-Virus-Vaccine.ps1"; DestDir: "{app}"; Flags: ignoreversion
-Source: "RecoveryPlan.ps1"; DestDir: "{app}"; Flags: ignoreversion
-Source: "Safe-Malware-Sweeper.ps1"; DestDir: "{app}"; Flags: ignoreversion
-Source: "vHidden_C.csv"; DestDir: "{app}"; Flags: ignoreversion
-Source: "Modules\*"; DestDir: "{app}\Modules"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 [Icons]
 Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; IconFilename: "{app}\icon.ico"

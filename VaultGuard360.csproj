@@ -1,0 +1,39 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <RuntimeIdentifiers>win-x64</RuntimeIdentifiers>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <ApplicationIcon>icon.ico</ApplicationIcon>
+    <AssemblyName>VaultGuard360</AssemblyName>
+    <RootNamespace>VaultGuard360</RootNamespace>
+    <Version>1.0.0</Version>
+    <Authors>Klyvex Studios</Authors>
+    <Company>Klyvex Studios Security Team</Company>
+    <Product>VaultGuard 360 Security Suite</Product>
+    <Copyright>Copyright (c) 2026 Klyvex Studios</Copyright>
+  </PropertyGroup>
+
+  <!-- Embed PowerShell Engine Scripts and UI HTML into Binary Memory Stream -->
+  <ItemGroup>
+    <EmbeddedResource Include="PaintGuardEngine.ps1" />
+    <EmbeddedResource Include="Modules\VaultGuard.PaintGeacata.psm1" />
+    <EmbeddedResource Include="Modules\VaultGuard.ShortcutWorm.psm1" />
+    <EmbeddedResource Include="Modules\VaultGuard.Expiro.psm1" />
+    <EmbeddedResource Include="Modules\VaultGuard.Vault.psm1" />
+    <EmbeddedResource Include="Modules\VaultGuard.Persistence.psm1" />
+    <EmbeddedResource Include="Modules\VaultGuard.Vaccine.psm1" />
+    <EmbeddedResource Include="Modules\VaultGuard.Audit.psm1" />
+    <EmbeddedResource Include="Modules\VaultGuard.Detection.psm1" />
+    <EmbeddedResource Include="VaultGuard 360 UI.html" />
+  </ItemGroup>
+
+  <!-- System Management Automation for In-Memory PowerShell Runspace Engine -->
+  <ItemGroup>
+    <PackageReference Include="System.Management.Automation" Version="7.4.5" />
+  </ItemGroup>
+
+</Project>
