@@ -18,18 +18,15 @@ jobs:
       - name: Checkout Source Code
         uses: actions/checkout@v4
 
-      - name: Setup Inno Setup Compiler
-        uses: sborgert/setup-inno-setup@v1
+      - name: Setup .NET 8 SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
 
       - name: Generate High-Res Icon
         shell: powershell
         run: |
           .\ConvertLogoToIcon.ps1
-
-      - name: Compile VaultGuard360 Desktop App (.exe)
-        shell: powershell
-        run: |
-          .\Build-App.ps1
 
       - name: Compile Custom WPF Installer (VaultGuard360_Setup.exe)
         shell: powershell
