@@ -81,8 +81,8 @@ namespace VaultGuard360
         private void InitializeComponent()
         {
             this.Text = "VaultGuard 360 Antivirus - Created by Klyvex Studios";
-            this.Size = new Size(1280, 800);
-            this.MinimumSize = new Size(960, 600);
+            this.Size = new Size(1480, 920);
+            this.MinimumSize = new Size(1100, 700);
             this.StartPosition = FormStartPosition.CenterScreen;
             this.BackColor = Color.FromArgb(15, 23, 42); // Dark #0f172a
             this.ForeColor = Color.White;

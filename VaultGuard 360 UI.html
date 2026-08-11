@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -12,38 +12,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
     
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        try {
-            tailwind.config = {
-                darkMode: 'class',
-                theme: {
-                    extend: {
-                        colors: {
-                            'background': '#0b1326',
-                            'surface': '#0b1326',
-                            'surface-container': '#171f33',
-                            'surface-container-high': '#222a3d',
-                            'surface-variant': '#222a3d',
-                            'on-background': '#dae2fd',
-                            'on-surface': '#dae2fd',
-                            'on-surface-variant': '#909bb5',
-                            'primary': '#b4c5ff',
-                            'primary-container': '#2563eb',
-                            'on-primary': '#002a78',
-                            'secondary': '#68dba9',
-                            'secondary-container': '#005238',
-                            'tertiary': '#ffb4ab',
-                            'outline-variant': '#3a445c'
-                        }
-                    }
-                }
-            };
-        } catch(e) {}
-    </script>
-
-    <!-- Strict Standalone Dark Theme CSS Styles (IE11 & WebBrowser Compatibility) -->
+    <!-- Strict Desktop Dark Theme CSS Engine for 100% Visual Fidelity to Stitch Designs -->
     <style>
         * {
             box-sizing: border-box;
@@ -54,102 +23,111 @@
             background-color: #0b1326 !important;
             color: #dae2fd !important;
             font-family: 'Inter', sans-serif;
-            height: 100%;
-            width: 100%;
+            height: 100vh;
+            width: 100vw;
             overflow: hidden;
             user-select: none;
             -webkit-user-select: none;
         }
 
-        /* Layout Structure */
-        #appSidebar {
+        /* SideNavBar */
+        #navSideBar {
             position: fixed;
             left: 0;
             top: 0;
             bottom: 0;
             width: 256px;
             background-color: #171f33;
-            border-right: 1px solid #3a445c;
+            border-right: 1px solid #434655;
             display: flex;
             flex-direction: column;
             z-index: 100;
         }
-        #appHeader {
-            position: fixed;
-            top: 0;
-            left: 256px;
-            right: 0;
-            height: 64px;
-            background-color: #0b1326;
-            border-bottom: 1px solid #3a445c;
+        .brand-header {
+            padding: 24px;
+            border-bottom: 1px solid #434655;
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            padding: 0 32px;
-            z-index: 90;
+            gap: 12px;
         }
-        #appCanvas {
-            margin-left: 256px;
-            margin-top: 64px;
-            height: calc(100vh - 64px);
-            overflow-y: auto;
-            background-color: #060e1e;
-            padding: 32px;
+        .nav-list {
+            flex: 1;
+            padding: 16px 8px;
         }
-
-        /* Stitch Status Ring */
-        .status-ring {
-            width: 220px;
-            height: 220px;
-            background: conic-gradient(from 0deg, #68dba9 0%, #2563eb 50%, #68dba9 100%);
-            border-radius: 50%;
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 0 30px rgba(104, 219, 169, 0.25);
-            margin-bottom: 24px;
-        }
-        .status-ring::before {
-            content: '';
-            position: absolute;
-            inset: 6px;
-            background-color: #171f33;
-            border-radius: 50%;
-        }
-
-        /* Navigation Buttons */
-        .nav-link {
+        .nav-item {
             display: flex;
             align-items: center;
             gap: 12px;
             width: 100%;
             padding: 12px 16px;
-            color: #909bb5;
+            color: #c3c6d7;
             background: transparent;
             border: none;
             border-left: 4px solid transparent;
-            font-size: 14px;
-            font-weight: 500;
+            font-size: 13px;
+            font-weight: 600;
             cursor: pointer;
             text-align: left;
+            border-radius: 0 8px 8px 0;
             transition: all 0.2s ease;
+            margin-bottom: 4px;
         }
-        .nav-link:hover {
-            background-color: #222a3d;
+        .nav-item:hover {
+            background-color: #2d3449;
             color: #dae2fd;
         }
-        .nav-link.active-tab {
+        .nav-item.active {
             color: #b4c5ff;
             font-weight: 700;
             background-color: #222a3d;
             border-left-color: #b4c5ff;
         }
 
+        /* TopAppBar Header */
+        #topHeader {
+            position: fixed;
+            top: 0;
+            left: 256px;
+            right: 0;
+            height: 64px;
+            background-color: #0b1326;
+            border-bottom: 1px solid #434655;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 32px;
+            z-index: 90;
+        }
+
+        /* Main Workspace Canvas */
+        #mainCanvas {
+            margin-left: 256px;
+            margin-top: 64px;
+            height: calc(100vh - 64px);
+            overflow-y: auto;
+            background-color: #060e20;
+            padding: 32px;
+        }
+
+        /* Stitch Bento Cards */
+        .stitch-card {
+            background-color: #171f33;
+            border: 1px solid #434655;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+        .card-inner {
+            background-color: #2d3449;
+            border: 1px solid #434655;
+            border-radius: 8px;
+            padding: 16px;
+        }
+
         /* Buttons & Badges */
-        .btn-primary {
-            background-color: #b4c5ff;
-            color: #002a78;
+        .btn-stitch-primary {
+            background-color: #2563eb;
+            color: #ffffff;
             font-weight: 700;
             padding: 10px 20px;
             border-radius: 6px;
@@ -161,54 +139,83 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            box-shadow: 0 0 15px rgba(180, 197, 255, 0.3);
+            box-shadow: 0 0 15px rgba(37, 99, 235, 0.3);
         }
-        .btn-primary:hover {
-            background-color: #2563eb;
-            color: #ffffff;
+        .btn-stitch-primary:hover {
+            background-color: #b4c5ff;
+            color: #002a78;
         }
-        .btn-secondary {
-            background-color: #222a3d;
+        .btn-stitch-secondary {
+            background-color: #2d3449;
             color: #dae2fd;
-            border: 1px solid #3a445c;
+            border: 1px solid #434655;
             padding: 8px 16px;
             border-radius: 6px;
             cursor: pointer;
             font-size: 12px;
+            font-weight: 600;
         }
-        .btn-secondary:hover {
-            background-color: #2b344a;
+        .btn-stitch-secondary:hover {
+            background-color: #222a3d;
+            border-color: #b4c5ff;
         }
 
-        /* Cards & Bento Grid */
-        .card-panel {
+        /* Central Status Ring */
+        .status-ring-container {
+            width: 240px;
+            height: 240px;
+            background: conic-gradient(from 0deg, #68dba9 0%, #2563eb 50%, #68dba9 100%);
+            border-radius: 50%;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 35px rgba(104, 219, 169, 0.3);
+            margin: 0 auto 24px auto;
+        }
+        .status-ring-container::before {
+            content: '';
+            position: absolute;
+            inset: 6px;
             background-color: #171f33;
-            border: 1px solid #3a445c;
-            border-radius: 12px;
-            padding: 24px;
+            border-radius: 50%;
         }
 
-        /* Toast Container */
-        #toastArea {
+        /* Grid Layout Extensions */
+        .row-clearfix::after {
+            content: "";
+            clear: both;
+            display: table;
+        }
+        .col-left-6 { float: left; width: 48.5%; margin-right: 3%; }
+        .col-right-6 { float: left; width: 48.5%; }
+        .col-dash-main { float: left; width: 48.5%; margin-right: 3%; }
+        .col-dash-realtime { float: left; width: 23%; margin-right: 2.5%; }
+        .col-dash-health { float: left; width: 23%; }
+
+        .rung-col { float: left; width: 23.5%; margin-right: 2%; }
+        .rung-col:last-child { margin-right: 0; }
+
+        /* Toast Notifications */
+        #toastContainer {
             position: fixed;
             bottom: 24px;
             right: 24px;
             z-index: 9999;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 12px;
         }
-        .toast-box {
-            background-color: #171f33;
-            border: 1px solid #3a445c;
+        .toast-card {
+            background: #171f33;
+            border: 1px solid #434655;
             border-left: 4px solid #68dba9;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
             border-radius: 8px;
-            padding: 14px 18px;
-            width: 360px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-            font-size: 13px;
+            padding: 16px;
+            width: 380px;
         }
-        .toast-box.threat {
+        .toast-card.alert-threat {
             border-left-color: #ffb4ab;
         }
     </style>
@@ -216,136 +223,143 @@
 <body>
 
     <!-- Toast Area -->
-    <div id="toastArea"></div>
+    <div id="toastContainer"></div>
 
-    <!-- SideNavBar (Stitch Layout) -->
-    <div id="appSidebar">
-        <div style="padding: 20px; border-bottom: 1px solid #3a445c; display: flex; align-items: center; gap: 12px;">
-            <span class="material-symbols-outlined" style="color: #b4c5ff; font-size: 28px; font-variation-settings: 'FILL' 1;">shield</span>
+    <!-- SideNavBar (Stitch Navigation) -->
+    <div id="navSideBar">
+        <div class="brand-header">
+            <span class="material-symbols-outlined" style="color: #b4c5ff; font-size: 32px; font-variation-settings: 'FILL' 1;">shield</span>
             <div>
-                <h1 style="font-size: 16px; font-weight: 700; color: #b4c5ff; font-family: 'Space Grotesk', sans-serif;">VaultGuard 360</h1>
-                <p style="font-size: 11px; color: #909bb5; font-family: 'JetBrains Mono', monospace;">V-v1.0.0 High-Security</p>
+                <h1 style="font-size: 18px; font-weight: 700; color: #b4c5ff; font-family: 'Space Grotesk', sans-serif;">VaultGuard 360</h1>
+                <p style="font-size: 11px; color: #c3c6d7; font-family: 'JetBrains Mono', monospace;">V-v1.0.0 High-Security</p>
             </div>
         </div>
 
-        <div style="flex: 1; padding: 16px 0;">
-            <button onclick="switchTab('dashboard')" id="btn-dashboard" class="nav-link active-tab">
+        <div class="nav-list">
+            <button onclick="switchTab('dashboard')" id="btn-dashboard" class="nav-item active">
                 <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">dashboard</span>
                 <span>Dashboard</span>
             </button>
-            <button onclick="switchTab('scancenter')" id="btn-scancenter" class="nav-link">
+            <button onclick="switchTab('scancenter')" id="btn-scancenter" class="nav-item">
                 <span class="material-symbols-outlined">security</span>
                 <span>Scan Center</span>
             </button>
-            <button onclick="switchTab('vaultmanager')" id="btn-vaultmanager" class="nav-link">
+            <button onclick="switchTab('vaultmanager')" id="btn-vaultmanager" class="nav-item">
                 <span class="material-symbols-outlined">lock</span>
                 <span>Vault Manager</span>
             </button>
-            <button onclick="switchTab('settings')" id="btn-settings" class="nav-link">
+            <button onclick="switchTab('settings')" id="btn-settings" class="nav-item">
                 <span class="material-symbols-outlined">settings</span>
                 <span>Security Settings</span>
             </button>
         </div>
 
-        <div style="padding: 16px; border-top: 1px solid #3a445c; text-align: center;">
-            <div style="background-color: #222a3d; padding: 10px; border-radius: 6px; border: 1px solid #3a445c;">
-                <p style="font-size: 11px; color: #b4c5ff; font-weight: 700; font-family: 'JetBrains Mono', monospace;">Klyvex Studios</p>
-                <p style="font-size: 10px; color: #909bb5;">VaultGuard Security Engine</p>
+        <div style="padding: 16px; border-top: 1px solid #434655; text-align: center;">
+            <div style="background-color: #222a3d; padding: 12px; border-radius: 6px; border: 1px solid #434655;">
+                <p style="font-size: 12px; color: #b4c5ff; font-weight: 700; font-family: 'JetBrains Mono', monospace;">Klyvex Studios</p>
+                <p style="font-size: 10px; color: #c3c6d7; margin-top: 2px;">Antivirus &amp; Immunity Suite</p>
             </div>
+        </div>
+
+        <div style="padding: 12px 16px; border-top: 1px solid #434655;">
+            <button onclick="openConsoleLogs()" class="btn-stitch-secondary" style="width: 100%; justify-content: center; font-size: 11px;">
+                <span class="material-symbols-outlined" style="font-size: 16px;">terminal</span>
+                Console &amp; Event Logs
+            </button>
         </div>
     </div>
 
     <!-- TopAppBar Header -->
-    <div id="appHeader">
-        <div style="display: flex; align-items: center; gap: 8px;">
-            <span class="material-symbols-outlined" style="color: #68dba9; font-size: 20px;">verified_user</span>
-            <span style="font-size: 13px; font-weight: 700; color: #dae2fd;">Created by Klyvex Studios</span>
+    <div id="topHeader">
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <span class="material-symbols-outlined" style="color: #68dba9; font-size: 22px;">verified_user</span>
+            <span style="font-size: 14px; font-weight: 700; color: #dae2fd;">Created by Klyvex Studios</span>
         </div>
 
-        <div style="display: flex; align-items: center; gap: 20px;">
-            <div style="display: flex; align-items: center; gap: 14px; color: #909bb5;">
-                <span class="material-symbols-outlined" title="Alerts">notifications</span>
-                <span class="material-symbols-outlined" style="color: #68dba9; font-variation-settings: 'FILL' 1;" title="Real-Time Active">shield</span>
-                <span class="material-symbols-outlined" style="color: #68dba9;" title="USB Watcher Active">usb</span>
-                <span class="material-symbols-outlined" title="Heuristics">bug_report</span>
+        <div style="display: flex; align-items: center; gap: 24px;">
+            <div style="display: flex; align-items: center; gap: 16px; color: #c3c6d7;">
+                <span class="material-symbols-outlined" title="Alerts" style="cursor: pointer;">notifications</span>
+                <span class="material-symbols-outlined" style="color: #68dba9; font-variation-settings: 'FILL' 1; cursor: pointer;" title="Shield Active">shield</span>
+                <span class="material-symbols-outlined" style="color: #68dba9; cursor: pointer;" title="USB Watchdog Listening">usb</span>
+                <span class="material-symbols-outlined" title="Heuristic Scanner" style="cursor: pointer;">bug_report</span>
             </div>
-            <div style="height: 20px; width: 1px; background-color: #3a445c;"></div>
-            <div style="display: flex; align-items: center; gap: 14px;">
-                <span style="color: #68dba9; font-size: 11px; font-family: 'JetBrains Mono', monospace; font-weight: 700;">SYSTEM IMMUNIZED</span>
-                <button onclick="runQuickScan()" class="btn-primary">
-                    <span class="material-symbols-outlined" style="font-size: 16px;">radar</span>
+            <div style="height: 24px; width: 1px; background-color: #434655;"></div>
+            <div style="display: flex; align-items: center; gap: 16px;">
+                <span style="color: #68dba9; font-size: 12px; font-family: 'JetBrains Mono', monospace; font-weight: 700;">SYSTEM IMMUNIZED</span>
+                <button onclick="runQuickScan()" class="btn-stitch-primary">
+                    <span class="material-symbols-outlined" style="font-size: 18px;">radar</span>
                     Quick Scan
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- Canvas Main Tabs -->
-    <div id="appCanvas">
+    <!-- Main Content Canvas -->
+    <div id="mainCanvas">
 
-        <!-- TAB 1: DASHBOARD -->
-        <div id="tab-dashboard" class="tab-panel" style="display: block;">
-            <div style="display: grid; grid-template-columns: repeat(12, 1fr); gap: 24px;">
+        <!-- TAB 1: DASHBOARD (Stitch Screen 1) -->
+        <div id="tab-dashboard" class="tab-view" style="display: block;">
+            <div class="row-clearfix">
                 
                 <!-- Central Status Card -->
-                <div class="card-panel" style="grid-column: span 6; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative;">
-                    <div style="position: absolute; top: 16px; right: 16px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #68dba9;">SYS_STATE: PROTECTED</div>
-                    <div class="status-ring">
-                        <div style="position: relative; z-index: 10; text-align: center; display: flex; flex-direction: column; align-items: center;">
-                            <span class="material-symbols-outlined" style="color: #68dba9; font-size: 48px; font-variation-settings: 'FILL' 1;">security</span>
-                            <h2 style="font-size: 24px; font-weight: 700; color: #dae2fd; margin-top: 4px;">Protected</h2>
-                            <p style="font-size: 12px; color: #909bb5; margin-top: 2px;">Real-Time Protection Active</p>
+                <div class="stitch-card col-dash-main" style="text-align: center; position: relative;">
+                    <div style="position: absolute; top: 16px; right: 16px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #68dba9;">SYS_STATE: SECURE</div>
+                    <div class="status-ring-container">
+                        <div style="position: relative; z-index: 10; display: flex; flex-direction: column; align-items: center;">
+                            <span class="material-symbols-outlined" style="color: #68dba9; font-size: 56px; font-variation-settings: 'FILL' 1;">security</span>
+                            <h2 style="font-size: 26px; font-weight: 700; color: #dae2fd; margin-top: 6px;">Protected</h2>
+                            <p style="font-size: 12px; color: #c3c6d7; margin-top: 2px;">Real-Time Engine Active</p>
                         </div>
                     </div>
-                    <button onclick="runQuickScan()" class="btn-primary" style="padding: 12px 28px;">
+                    <button onclick="runQuickScan()" class="btn-stitch-primary" style="padding: 12px 32px; font-size: 13px;">
                         <span class="material-symbols-outlined">bolt</span>
                         Execute Quick Scan Now
                     </button>
                 </div>
 
                 <!-- Real-Time Protection Card -->
-                <div class="card-panel" style="grid-column: span 3; display: flex; flex-direction: column; justify-content: space-between;">
+                <div class="stitch-card col-dash-realtime" style="display: flex; flex-direction: column; justify-content: space-between;">
                     <div>
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                             <h3 style="font-size: 15px; font-weight: 700; color: #b4c5ff;">Real-Time Protection</h3>
-                            <span style="background-color: #005238; color: #87f8c4; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-family: 'JetBrains Mono', monospace; font-weight: 700;">ACTIVE</span>
+                            <span style="background-color: #25a475; color: #00311f; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-family: 'JetBrains Mono', monospace; font-weight: 700;">ACTIVE</span>
                         </div>
-                        <div style="display: flex; flex-direction: column; gap: 12px;">
-                            <div style="background-color: #222a3d; padding: 12px; border-radius: 6px; border: 1px solid #3a445c;">
+                        <div style="display: flex; flex-direction: column; gap: 14px;">
+                            <div class="card-inner">
                                 <div style="display: flex; justify-content: space-between; align-items: center;">
                                     <span style="font-size: 12px; font-weight: 700; color: #dae2fd;">USB Watcher</span>
                                     <span class="material-symbols-outlined" style="color: #68dba9; font-size: 16px;">check_circle</span>
                                 </div>
-                                <p style="font-size: 11px; color: #909bb5; font-family: 'JetBrains Mono', monospace; margin-top: 4px;">VolumeChangeEvent: LISTEN</p>
+                                <p style="font-size: 11px; color: #c3c6d7; font-family: 'JetBrains Mono', monospace; margin-top: 4px;">VolumeChangeEvent: LISTEN</p>
                             </div>
-                            <div style="background-color: #222a3d; padding: 12px; border-radius: 6px; border: 1px solid #3a445c;">
+                            <div class="card-inner">
                                 <div style="display: flex; justify-content: space-between; align-items: center;">
-                                    <span style="font-size: 12px; font-weight: 700; color: #dae2fd;">Heuristic Guard</span>
+                                    <span style="font-size: 12px; font-weight: 700; color: #dae2fd;">Network Guard</span>
                                     <span class="material-symbols-outlined" style="color: #68dba9; font-size: 16px;">check_circle</span>
                                 </div>
-                                <p style="font-size: 11px; color: #909bb5; font-family: 'JetBrains Mono', monospace; margin-top: 4px;">PE Inspection: ENFORCED</p>
+                                <p style="font-size: 11px; color: #c3c6d7; font-family: 'JetBrains Mono', monospace; margin-top: 4px;">Traffic: IN/OUT SECURE</p>
                             </div>
                         </div>
                     </div>
-                    <div style="margin-top: 16px; padding-top: 12px; border-top: 1px solid #3a445c; display: flex; justify-content: space-between; font-size: 11px; color: #909bb5; font-family: 'JetBrains Mono', monospace;">
+                    <div style="margin-top: 20px; padding-top: 12px; border-top: 1px solid #434655; display: flex; justify-content: space-between; font-size: 11px; color: #c3c6d7; font-family: 'JetBrains Mono', monospace;">
                         <span>Port: 18443</span>
                         <span>Auth: Bearer</span>
                     </div>
                 </div>
 
                 <!-- Security Health Card -->
-                <div class="card-panel" style="grid-column: span 3;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                <div class="stitch-card col-dash-health">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                         <h3 style="font-size: 15px; font-weight: 700; color: #b4c5ff;">Security Health</h3>
-                        <span style="font-size: 11px; color: #909bb5; font-family: 'JetBrains Mono', monospace;">ACL_STATUS</span>
+                        <span style="font-size: 11px; color: #c3c6d7; font-family: 'JetBrains Mono', monospace;">ACL_STATUS</span>
                     </div>
-                    <div style="display: flex; flex-direction: column; gap: 16px;">
+                    <div style="display: flex; flex-direction: column; gap: 20px;">
                         <div>
                             <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 6px;">
-                                <span>Baseline Golden Vault</span>
+                                <span>Baseline Vault</span>
                                 <span style="color: #68dba9; font-weight: 700;">Intact</span>
                             </div>
-                            <div style="width: 100%; background-color: #222a3d; height: 8px; border-radius: 4px; overflow: hidden;">
+                            <div style="width: 100%; background-color: #2d3449; height: 8px; border-radius: 4px; overflow: hidden;">
                                 <div style="width: 100%; background-color: #68dba9; height: 100%;"></div>
                             </div>
                         </div>
@@ -354,164 +368,207 @@
                                 <span>Quarantine Vault</span>
                                 <span id="dashQuarantineCount" style="color: #b4c5ff; font-weight: 700;">0 Items</span>
                             </div>
-                            <div style="width: 100%; background-color: #222a3d; height: 8px; border-radius: 4px; overflow: hidden;">
+                            <div style="width: 100%; background-color: #2d3449; height: 8px; border-radius: 4px; overflow: hidden;">
                                 <div style="width: 100%; background-color: #b4c5ff; height: 100%;"></div>
                             </div>
                         </div>
                     </div>
                 </div>
-
-                <!-- 1-Click Multi-Family Remediation Ladder -->
-                <div class="card-panel" style="grid-column: span 12;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid #3a445c;">
-                        <div>
-                            <h3 style="font-size: 16px; font-weight: 700; color: #b4c5ff;">1-Click Multi-Family Remediation Wizard</h3>
-                            <p style="font-size: 12px; color: #909bb5; margin-top: 4px;">Remediates Paint/Geacata, Shortcut Worms, and Expiro PE infectors across drive targets.</p>
-                        </div>
-                        <div style="display: flex; align-items: center; gap: 12px;">
-                            <select id="targetDriveSelect" title="Target Drive for Remediation" aria-label="Target Drive for Remediation" style="background-color: #222a3d; color: #dae2fd; border: 1px solid #3a445c; padding: 8px 12px; border-radius: 6px; font-size: 12px; font-family: 'JetBrains Mono', monospace;">
-                                <option value="C:\">Target: Drive C:\</option>
-                                <option value="D:\">Target: Drive D:\</option>
-                                <option value="QUICK">Target: Quick System Folders</option>
-                                <option value="ALL">Target: All System Drives</option>
-                            </select>
-                            <button onclick="runRemediation()" class="btn-primary">
-                                <span class="material-symbols-outlined">layers_clear</span>
-                                Remediate Target Now
-                            </button>
-                        </div>
-                    </div>
-                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;">
-                        <div style="background-color: #222a3d; padding: 16px; border-radius: 8px; border-left: 4px solid #68dba9;">
-                            <div style="font-size: 10px; color: #909bb5; font-family: 'JetBrains Mono', monospace; text-transform: uppercase;">Step 1</div>
-                            <h4 style="font-size: 13px; font-weight: 700; color: #dae2fd; margin-top: 4px;">Process Termination</h4>
-                            <p style="font-size: 11px; color: #909bb5; margin-top: 4px;">Terminates active malware payloads in memory.</p>
-                        </div>
-                        <div style="background-color: #222a3d; padding: 16px; border-radius: 8px; border-left: 4px solid #68dba9;">
-                            <div style="font-size: 10px; color: #909bb5; font-family: 'JetBrains Mono', monospace; text-transform: uppercase;">Step 2</div>
-                            <h4 style="font-size: 13px; font-weight: 700; color: #dae2fd; margin-top: 4px;">Vault Restore</h4>
-                            <p style="font-size: 11px; color: #909bb5; margin-top: 4px;">Replaces infected PE executables with clean copies.</p>
-                        </div>
-                        <div style="background-color: #222a3d; padding: 16px; border-radius: 8px; border-left: 4px solid #68dba9;">
-                            <div style="font-size: 10px; color: #909bb5; font-family: 'JetBrains Mono', monospace; text-transform: uppercase;">Step 3</div>
-                            <h4 style="font-size: 13px; font-weight: 700; color: #dae2fd; margin-top: 4px;">Persistence Repair</h4>
-                            <p style="font-size: 11px; color: #909bb5; margin-top: 4px;">Cleans infected registry run keys &amp; WMI hooks.</p>
-                        </div>
-                        <div style="background-color: #222a3d; padding: 16px; border-radius: 8px; border-left: 4px solid #68dba9;">
-                            <div style="font-size: 10px; color: #909bb5; font-family: 'JetBrains Mono', monospace; text-transform: uppercase;">Step 4</div>
-                            <h4 style="font-size: 13px; font-weight: 700; color: #dae2fd; margin-top: 4px;">Vaccine Lock</h4>
-                            <p style="font-size: 11px; color: #909bb5; margin-top: 4px;">Deploys read-only dummy autorun.inf traps.</p>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-
-        <!-- TAB 2: SCAN CENTER -->
-        <div id="tab-scancenter" class="tab-panel" style="display: none;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid #3a445c;">
-                <div>
-                    <h2 style="font-size: 20px; font-weight: 700; color: #b4c5ff;">Active Scan Center</h2>
-                    <p style="font-size: 12px; color: #909bb5; margin-top: 4px;">Deep Multi-Family Heuristic Engine v1.0</p>
-                </div>
             </div>
 
-            <div style="display: grid; grid-template-columns: repeat(12, 1fr); gap: 24px;">
-                <div class="card-panel" style="grid-column: span 4;">
-                    <h3 style="font-size: 14px; font-weight: 700; color: #dae2fd; margin-bottom: 16px;">Target Path Selection</h3>
-                    <input type="text" id="scanPathInput" value="C:\" style="width: 100%; background-color: #222a3d; color: #dae2fd; border: 1px solid #3a445c; padding: 10px; border-radius: 6px; font-size: 12px; font-family: 'JetBrains Mono', monospace; margin-bottom: 12px;" />
-                    <div style="display: flex; gap: 8px; margin-bottom: 16px;">
-                        <button onclick="setPath('C:\\')" class="btn-secondary" style="flex: 1;">Drive C:\</button>
-                        <button onclick="setPath('D:\\')" class="btn-secondary" style="flex: 1;">Drive D:\</button>
+            <!-- 4-Rung Remediation Tracker Row -->
+            <div class="stitch-card" style="margin-top: 24px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid #434655;">
+                    <div>
+                        <h3 style="font-size: 16px; font-weight: 700; color: #b4c5ff;">4-Rung Remediation Tracker</h3>
+                        <p style="font-size: 12px; color: #c3c6d7; margin-top: 4px;">Executes multi-family neutralization across system drives.</p>
                     </div>
-                    <button onclick="runDeepScan()" class="btn-primary" style="width: 100%; justify-content: center; padding: 12px;">
-                        <span class="material-symbols-outlined">radar</span>
-                        Start Heuristic Scan
-                    </button>
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <select id="targetDriveSelect" title="Target Drive for Remediation" aria-label="Target Drive for Remediation" style="background-color: #2d3449; color: #dae2fd; border: 1px solid #434655; padding: 8px 12px; border-radius: 6px; font-size: 12px; font-family: 'JetBrains Mono', monospace;">
+                            <option value="C:\">Target: Drive C:\</option>
+                            <option value="D:\">Target: Drive D:\</option>
+                            <option value="QUICK">Target: Quick System Folders</option>
+                            <option value="ALL">Target: All System Drives</option>
+                        </select>
+                        <button onclick="runRemediation()" class="btn-stitch-primary">
+                            <span class="material-symbols-outlined">layers_clear</span>
+                            Remediate Target Now
+                        </button>
+                    </div>
                 </div>
-
-                <div class="card-panel" style="grid-column: span 8; display: flex; flex-direction: column; height: 420px;">
-                    <h3 style="font-size: 14px; font-weight: 700; color: #dae2fd; margin-bottom: 12px;">Live Execution Console</h3>
-                    <div id="consoleBox" style="flex: 1; background-color: #060e1e; border: 1px solid #3a445c; border-radius: 6px; padding: 14px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #68dba9; overflow-y: auto;">
-                        <div>[SYSTEM] VaultGuard 360 Antivirus Console Active. Created by Klyvex Studios.</div>
+                <div class="row-clearfix">
+                    <div class="card-inner rung-col" style="border-left: 4px solid #68dba9;">
+                        <div style="font-size: 10px; color: #c3c6d7; font-family: 'JetBrains Mono', monospace; text-transform: uppercase;">Step 1</div>
+                        <h4 style="font-size: 13px; font-weight: 700; color: #dae2fd; margin-top: 4px;">Kill Process</h4>
+                        <p style="font-size: 11px; color: #c3c6d7; margin-top: 4px;">Terminates malware payloads in memory.</p>
+                    </div>
+                    <div class="card-inner rung-col" style="border-left: 4px solid #68dba9;">
+                        <div style="font-size: 10px; color: #c3c6d7; font-family: 'JetBrains Mono', monospace; text-transform: uppercase;">Step 2</div>
+                        <h4 style="font-size: 13px; font-weight: 700; color: #dae2fd; margin-top: 4px;">Vault Restore</h4>
+                        <p style="font-size: 11px; color: #c3c6d7; margin-top: 4px;">Replaces infected binaries with clean copies.</p>
+                    </div>
+                    <div class="card-inner rung-col" style="border-left: 4px solid #68dba9;">
+                        <div style="font-size: 10px; color: #c3c6d7; font-family: 'JetBrains Mono', monospace; text-transform: uppercase;">Step 3</div>
+                        <h4 style="font-size: 13px; font-weight: 700; color: #dae2fd; margin-top: 4px;">SFC / DISM Repair</h4>
+                        <p style="font-size: 11px; color: #c3c6d7; margin-top: 4px;">Cleans infected registry run keys &amp; WMI hooks.</p>
+                    </div>
+                    <div class="card-inner rung-col" style="border-left: 4px solid #68dba9;">
+                        <div style="font-size: 10px; color: #c3c6d7; font-family: 'JetBrains Mono', monospace; text-transform: uppercase;">Step 4</div>
+                        <h4 style="font-size: 13px; font-weight: 700; color: #dae2fd; margin-top: 4px;">Alerts &amp; Vaccines</h4>
+                        <p style="font-size: 11px; color: #c3c6d7; margin-top: 4px;">Deploys read-only dummy autorun.inf traps.</p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- TAB 3: VAULT MANAGER -->
-        <div id="tab-vaultmanager" class="tab-panel" style="display: none;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid #3a445c;">
+        <!-- TAB 2: SCAN CENTER (Stitch Screen 2) -->
+        <div id="tab-scancenter" class="tab-view" style="display: none;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid #434655;">
                 <div>
-                    <h2 style="font-size: 20px; font-weight: 700; color: #b4c5ff;">Vault Manager</h2>
-                    <p style="font-size: 12px; color: #909bb5; margin-top: 4px;">Golden Baseline Store &amp; Isolated Quarantine Vault.</p>
+                    <h2 style="font-size: 22px; font-weight: 700; color: #b4c5ff;">Active Scan Center</h2>
+                    <p style="font-size: 12px; color: #c3c6d7; margin-top: 4px;">Module: Deep Inspection Engine v4.2</p>
                 </div>
-                <button onclick="fetchQuarantineItems()" class="btn-secondary">
-                    <span class="material-symbols-outlined" style="font-size: 14px;">sync</span>
-                    Refresh Vault
+            </div>
+
+            <div class="row-clearfix">
+                <!-- Left Selection & Verdict Area -->
+                <div style="float: left; width: 34%; margin-right: 3%;">
+                    <div class="stitch-card" style="margin-bottom: 20px;">
+                        <h3 style="font-size: 14px; font-weight: 700; color: #dae2fd; margin-bottom: 16px;">Selection Area</h3>
+                        <input type="text" id="scanPathInput" value="C:\" style="width: 100%; background-color: #2d3449; color: #dae2fd; border: 1px solid #434655; padding: 10px; border-radius: 6px; font-size: 12px; font-family: 'JetBrains Mono', monospace; margin-bottom: 12px;" />
+                        <div style="display: flex; gap: 8px; margin-bottom: 16px;">
+                            <button onclick="setPath('C:\\')" class="btn-stitch-secondary" style="flex: 1;">Drive C:\</button>
+                            <button onclick="setPath('D:\\')" class="btn-stitch-secondary" style="flex: 1;">Drive D:\</button>
+                        </div>
+                        <button onclick="runDeepScan()" class="btn-stitch-primary" style="width: 100%; justify-content: center; padding: 12px;">
+                            <span class="material-symbols-outlined">radar</span>
+                            Start Heuristic Scan
+                        </button>
+                    </div>
+
+                    <div class="stitch-card">
+                        <h3 style="font-size: 14px; font-weight: 700; color: #dae2fd; margin-bottom: 16px;">Real-Time Verdict</h3>
+                        <div style="display: flex; flex-direction: column; gap: 12px;">
+                            <div class="card-inner" style="border-left: 4px solid #68dba9; display: flex; justify-content: space-between; align-items: center;">
+                                <span style="color: #68dba9; font-weight: 700; font-size: 12px;">CLEAN</span>
+                                <span style="font-weight: 700; font-size: 16px; color: #dae2fd;">142,851</span>
+                            </div>
+                            <div class="card-inner" style="border-left: 4px solid #ffb77d; display: flex; justify-content: space-between; align-items: center;">
+                                <span style="color: #ffb77d; font-weight: 700; font-size: 12px;">SUSPICIOUS</span>
+                                <span style="font-weight: 700; font-size: 16px; color: #ffb77d;">0</span>
+                            </div>
+                            <div class="card-inner" style="border-left: 4px solid #ffb4ab; display: flex; justify-content: space-between; align-items: center;">
+                                <span style="color: #ffb4ab; font-weight: 700; font-size: 12px;">INFECTED</span>
+                                <span style="font-weight: 700; font-size: 16px; color: #ffb4ab;">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Live Terminal Area -->
+                <div style="float: left; width: 63%;">
+                    <div class="stitch-card" style="display: flex; flex-direction: column; height: 480px;">
+                        <h3 style="font-size: 14px; font-weight: 700; color: #dae2fd; margin-bottom: 14px;">Technical Terminal Output</h3>
+                        <div id="consoleBox" style="flex: 1; background-color: #060e20; border: 1px solid #434655; border-radius: 6px; padding: 16px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #68dba9; overflow-y: auto;">
+                            <div>[SYSTEM] VaultGuard 360 Deep Inspection Engine v4.2 Active. Created by Klyvex Studios.</div>
+                            <div>[READY] Waiting for scan execution...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 3: VAULT MANAGER (Stitch Screen 4) -->
+        <div id="tab-vaultmanager" class="tab-view" style="display: none;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid #434655;">
+                <div>
+                    <h2 style="font-size: 22px; font-weight: 700; color: #b4c5ff;">Vault Manager</h2>
+                    <p style="font-size: 12px; color: #c3c6d7; margin-top: 4px;">Baseline Golden Store &amp; Isolated Payload Manager</p>
+                </div>
+                <button onclick="fetchQuarantineItems()" class="btn-stitch-secondary">
+                    <span class="material-symbols-outlined" style="font-size: 16px;">sync</span>
+                    Sync Vault Items
                 </button>
             </div>
 
-            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px;">
-                <div class="card-panel">
-                    <h3 style="font-size: 14px; font-weight: 700; color: #b4c5ff; margin-bottom: 12px;">Baseline Golden Vault</h3>
-                    <p style="font-size: 12px; color: #909bb5; margin-bottom: 16px;">Verified clean executables backed up for system recovery.</p>
-                    <div style="background-color: #222a3d; padding: 12px; border-radius: 6px; font-size: 12px; font-family: 'JetBrains Mono', monospace; display: flex; justify-content: space-between;">
+            <div class="row-clearfix">
+                <!-- Baseline Vault -->
+                <div class="stitch-card col-left-6">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #434655;">
+                        <h3 style="font-size: 14px; font-weight: 700; color: #b4c5ff;">Baseline Vault</h3>
+                        <span style="background-color: rgba(104, 219, 169, 0.1); color: #68dba9; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-family: 'JetBrains Mono', monospace;">STATUS: INTEGRITY VERIFIED</span>
+                    </div>
+                    <p style="font-size: 12px; color: #c3c6d7; margin-bottom: 16px;">Clean golden binaries stored in read-only ACL storage for instant restoration.</p>
+                    <div class="card-inner" style="display: flex; justify-content: space-between; font-family: 'JetBrains Mono', monospace; font-size: 12px;">
                         <span>C:\Windows\System32\mspaint.exe</span>
                         <span style="color: #68dba9; font-weight: 700;">GOLDEN MATCH</span>
                     </div>
                 </div>
 
-                <div class="card-panel">
-                    <h3 style="font-size: 14px; font-weight: 700; color: #ffb4ab; margin-bottom: 12px;">Quarantine Payload Vault</h3>
-                    <div id="quarantineList" style="display: flex; flex-direction: column; gap: 8px; max-height: 300px; overflow-y: auto;">
-                        <div style="font-size: 12px; color: #909bb5; text-align: center; padding: 24px; font-family: 'JetBrains Mono', monospace;">No malware payloads in quarantine vault.</div>
+                <!-- Quarantine Vault -->
+                <div class="stitch-card col-right-6">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #434655;">
+                        <h3 style="font-size: 14px; font-weight: 700; color: #ffb4ab;">Quarantine Isolated Vault</h3>
+                        <span id="quarantineCountBadge" style="background-color: rgba(255, 180, 171, 0.1); color: #ffb4ab; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-family: 'JetBrains Mono', monospace;">0 PAYLOADS</span>
+                    </div>
+                    <div id="quarantineList" style="display: flex; flex-direction: column; gap: 10px; max-height: 320px; overflow-y: auto;">
+                        <div style="font-size: 12px; color: #c3c6d7; text-align: center; padding: 32px; font-family: 'JetBrains Mono', monospace;">No infected items in quarantine vault.</div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- TAB 4: SECURITY SETTINGS -->
-        <div id="tab-settings" class="tab-panel" style="display: none;">
-            <div style="margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid #3a445c;">
-                <h2 style="font-size: 20px; font-weight: 700; color: #b4c5ff;">Security Configuration</h2>
-                <p style="font-size: 12px; color: #909bb5; margin-top: 4px;">System defense status and publisher metadata.</p>
+        <!-- TAB 4: SECURITY SETTINGS (Stitch Screen 3) -->
+        <div id="tab-settings" class="tab-view" style="display: none;">
+            <div style="margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid #434655;">
+                <h2 style="font-size: 22px; font-weight: 700; color: #b4c5ff;">Security Configuration</h2>
+                <p style="font-size: 12px; color: #c3c6d7; margin-top: 4px;">Manage core defense mechanisms, API bindings, and subsystem immunization protocols.</p>
             </div>
 
-            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px;">
-                <div class="card-panel" style="display: flex; flex-direction: column; gap: 12px;">
-                    <h3 style="font-size: 14px; font-weight: 700; color: #dae2fd;">Protection Guards</h3>
-                    <div style="background-color: #222a3d; padding: 14px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;">
+            <div class="row-clearfix">
+                <div class="stitch-card col-left-6" style="display: flex; flex-direction: column; gap: 14px;">
+                    <h3 style="font-size: 15px; font-weight: 700; color: #dae2fd; margin-bottom: 4px;">Vaccine Guard</h3>
+                    <div class="card-inner" style="display: flex; justify-content: space-between; align-items: center;">
                         <div>
-                            <div style="font-size: 12px; font-weight: 700; color: #dae2fd;">USB Auto-Vaccine Service</div>
-                            <div style="font-size: 11px; color: #909bb5; margin-top: 2px;">Deploy autorun.inf dummy traps.</div>
-                        </div>
-                        <span style="color: #68dba9; font-weight: 700; font-size: 12px; font-family: 'JetBrains Mono', monospace;">ACTIVE</span>
-                    </div>
-                    <div style="background-color: #222a3d; padding: 14px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;">
-                        <div>
-                            <div style="font-size: 12px; font-weight: 700; color: #dae2fd;">AutoRun Policy Hardening</div>
-                            <div style="font-size: 11px; color: #909bb5; margin-top: 2px;">Registry NoDriveTypeAutoRun = 0xFF.</div>
+                            <div style="font-size: 13px; font-weight: 700; color: #dae2fd;">USB Auto-Vaccine Service</div>
+                            <div style="font-size: 11px; color: #c3c6d7; margin-top: 2px;">Injects decoy signatures and autorun.inf dummy traps.</div>
                         </div>
                         <span style="color: #68dba9; font-weight: 700; font-size: 12px; font-family: 'JetBrains Mono', monospace;">ENFORCED</span>
                     </div>
+                    <div class="card-inner" style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <div style="font-size: 13px; font-weight: 700; color: #dae2fd;">AutoRun Policy Hardening</div>
+                            <div style="font-size: 11px; color: #c3c6d7; margin-top: 2px;">Forces Registry NoDriveTypeAutoRun to 0xFF.</div>
+                        </div>
+                        <span style="color: #68dba9; font-weight: 700; font-size: 12px; font-family: 'JetBrains Mono', monospace;">ENFORCED</span>
+                    </div>
+                    <div class="card-inner" style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <div style="font-size: 13px; font-weight: 700; color: #dae2fd;">FAT32/NTFS Trap Deployment</div>
+                            <div style="font-size: 11px; color: #c3c6d7; margin-top: 2px;">Deploys read-only dummy autorun.inf directories.</div>
+                        </div>
+                        <span style="color: #68dba9; font-weight: 700; font-size: 12px; font-family: 'JetBrains Mono', monospace;">ACTIVE</span>
+                    </div>
                 </div>
 
-                <div class="card-panel">
-                    <h3 style="font-size: 14px; font-weight: 700; color: #dae2fd; margin-bottom: 16px;">App Metadata</h3>
-                    <div style="display: flex; flex-direction: column; gap: 10px; font-size: 12px; font-family: 'JetBrains Mono', monospace;">
-                        <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #3a445c; padding-bottom: 6px;">
-                            <span>App Name:</span>
+                <div class="stitch-card col-right-6">
+                    <h3 style="font-size: 15px; font-weight: 700; color: #dae2fd; margin-bottom: 16px;">App Publisher Metadata</h3>
+                    <div style="display: flex; flex-direction: column; gap: 12px; font-size: 12px; font-family: 'JetBrains Mono', monospace;">
+                        <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #434655; padding-bottom: 8px;">
+                            <span>Suite Name:</span>
                             <span style="color: #dae2fd; font-weight: 700;">VaultGuard 360</span>
                         </div>
-                        <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #3a445c; padding-bottom: 6px;">
+                        <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #434655; padding-bottom: 8px;">
                             <span>Version:</span>
                             <span style="color: #b4c5ff; font-weight: 700;">v1.0.0</span>
                         </div>
-                        <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #3a445c; padding-bottom: 6px;">
-                            <span>Publisher:</span>
+                        <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #434655; padding-bottom: 8px;">
+                            <span>Created By:</span>
                             <span style="color: #68dba9; font-weight: 700;">Klyvex Studios</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #434655; padding-bottom: 8px;">
+                            <span>REST Binding:</span>
+                            <span style="color: #c3c6d7;">127.0.0.1:18443</span>
                         </div>
                     </div>
                 </div>
@@ -520,24 +577,24 @@
 
     </div>
 
-    <!-- ES5 JavaScript Logic Compatible with IE11 / Trident Engine -->
+    <!-- Bulletproof ES5 JavaScript Engine -->
     <script>
         var BEARER_TOKEN = '';
         var API_PORT = 18443;
 
         function switchTab(tabId) {
-            var panels = ['dashboard', 'scancenter', 'vaultmanager', 'settings'];
-            for (var i = 0; i < panels.length; i++) {
-                var p = document.getElementById('tab-' + panels[i]);
-                var btn = document.getElementById('btn-' + panels[i]);
-                if (p) p.style.display = 'none';
-                if (btn) btn.className = 'nav-link';
+            var tabs = ['dashboard', 'scancenter', 'vaultmanager', 'settings'];
+            for (var i = 0; i < tabs.length; i++) {
+                var view = document.getElementById('tab-' + tabs[i]);
+                var btn = document.getElementById('btn-' + tabs[i]);
+                if (view) view.style.display = 'none';
+                if (btn) btn.className = 'nav-item';
             }
 
-            var activeP = document.getElementById('tab-' + tabId);
+            var activeView = document.getElementById('tab-' + tabId);
             var activeBtn = document.getElementById('btn-' + tabId);
-            if (activeP) activeP.style.display = 'block';
-            if (activeBtn) activeBtn.className = 'nav-link active-tab';
+            if (activeView) activeView.style.display = 'block';
+            if (activeBtn) activeBtn.className = 'nav-item active';
         }
 
         function setPath(p) {
@@ -556,14 +613,14 @@
         }
 
         function showThreatToast(title, msg, isThreat) {
-            var area = document.getElementById('toastArea');
-            if (!area) return;
+            var container = document.getElementById('toastContainer');
+            if (!container) return;
             var box = document.createElement('div');
-            box.className = 'toast-box' + (isThreat ? ' threat' : '');
-            box.innerHTML = '<strong style="color:' + (isThreat ? '#ffb4ab' : '#b4c5ff') + '">' + title + '</strong><br/><span style="color:#909bb5">' + msg + '</span>';
-            area.appendChild(box);
+            box.className = 'toast-card' + (isThreat ? ' alert-threat' : '');
+            box.innerHTML = '<strong style="color:' + (isThreat ? '#ffb4ab' : '#b4c5ff') + '">' + title + '</strong><br/><span style="color:#c3c6d7; font-size:12px;">' + msg + '</span>';
+            container.appendChild(box);
             setTimeout(function() {
-                try { area.removeChild(box); } catch(e){}
+                try { container.removeChild(box); } catch(e){}
             }, 5000);
         }
 
@@ -621,7 +678,9 @@
                     if (data.BearerToken) BEARER_TOKEN = data.BearerToken;
                     var count = data.QuarantineCount || 0;
                     var dashCount = document.getElementById('dashQuarantineCount');
+                    var badgeCount = document.getElementById('quarantineCountBadge');
                     if (dashCount) dashCount.innerText = count + ' Items';
+                    if (badgeCount) badgeCount.innerText = count + ' PAYLOADS';
                 }
             });
         }
@@ -632,7 +691,7 @@
             makeApiCall('/api/scan', 'POST', { Path: 'C:\\Program Files', DryRun: false }, function(err, data) {
                 if (!err && data) {
                     appendLog('Quick Scan Complete! Analyzed: ' + (data.Analyzed || 0) + ', Threats Found: ' + (data.ThreatsFound || 0), data.ThreatsFound > 0 ? '#ffb4ab' : '#68dba9');
-                    showToast(data.ThreatsFound > 0 ? 'Threats Found' : 'Scan Completed', 'Analyzed ' + (data.Analyzed || 0) + ' items on system drives.', data.ThreatsFound > 0);
+                    showThreatToast(data.ThreatsFound > 0 ? 'Threats Found' : 'Scan Completed', 'Analyzed ' + (data.Analyzed || 0) + ' items on system drives.', data.ThreatsFound > 0);
                 }
             });
         }
@@ -655,7 +714,7 @@
             makeApiCall('/api/remediate-all', 'POST', { TargetPaths: [target], DryRun: false }, function(err, data) {
                 if (!err && data) {
                     appendLog('Remediation Complete! Quarantined: ' + (data.ThreatsRemediated || 0) + ', Restored: ' + (data.FilesRestored || 0), '#68dba9');
-                    showToast('Remediation Complete', 'Quarantined: ' + (data.ThreatsRemediated || 0) + ', Restored: ' + (data.FilesRestored || 0) + ' clean files.', false);
+                    showThreatToast('Remediation Complete', 'Quarantined: ' + (data.ThreatsRemediated || 0) + ', Restored: ' + (data.FilesRestored || 0) + ' clean files.', false);
                 }
             });
         }
@@ -666,19 +725,23 @@
                     var list = document.getElementById('quarantineList');
                     if (!list) return;
                     if (data.length === 0) {
-                        list.innerHTML = '<div style="font-size:12px; color:#909bb5; text-align:center; padding:24px; font-family:\'JetBrains Mono\', monospace;">No malware payloads in quarantine vault.</div>';
+                        list.innerHTML = '<div style="font-size:12px; color:#c3c6d7; text-align:center; padding:32px; font-family:\'JetBrains Mono\', monospace;">No infected items in quarantine vault.</div>';
                         return;
                     }
                     var html = '';
                     for (var i = 0; i < data.length; i++) {
-                        html += '<div style="background-color:#222a3d; padding:10px; border-radius:6px; font-size:11px; font-family:\'JetBrains Mono\', monospace; display:flex; justify-content:space-between;"><span>' + (data[i].FileName || 'Payload.exe') + '</span><span style="color:#ffb4ab; font-weight:700;">ISOLATED</span></div>';
+                        html += '<div class="card-inner" style="display:flex; justify-style:space-between; font-size:11px; font-family:\'JetBrains Mono\', monospace;"><span>' + (data[i].FileName || 'Payload.exe') + '</span><span style="color:#ffb4ab; font-weight:700;">ISOLATED</span></div>';
                     }
                     list.innerHTML = html;
                 }
             });
         }
 
-        // Initialize status poll
+        function openConsoleLogs() {
+            switchTab('scancenter');
+            appendLog('[SYSTEM] Console & Event log view active.', '#b4c5ff');
+        }
+
         setInterval(fetchStatus, 3000);
         fetchStatus();
     </script>
