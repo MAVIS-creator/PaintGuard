@@ -2,6 +2,9 @@ name: Build & Publish GitHub Release
 
 on:
   push:
+    branches:
+      - main
+      - master
     tags:
       - 'v*.*.*'
   workflow_dispatch:
@@ -23,20 +26,24 @@ jobs:
         with:
           dotnet-version: '8.0.x'
 
-      - name: Generate High-Res Icon
+      - name: Generate High-Res Icon (If Script Present)
         shell: powershell
         run: |
-          .\ConvertLogoToIcon.ps1
+          if (Test-Path ".\ConvertLogoToIcon.ps1") {
+            powershell -ExecutionPolicy Bypass -File .\ConvertLogoToIcon.ps1
+          } else {
+            Write-Host "ConvertLogoToIcon.ps1 not found. Using prebuilt icon.ico."
+          }
 
       - name: Compile Custom WPF Installer (VaultGuard360_Setup.exe)
         shell: powershell
         run: |
-          .\Build-Installer.ps1
+          powershell -ExecutionPolicy Bypass -File .\Build-Installer.ps1
 
       - name: Create GitHub Release & Upload Assets
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ github.ref_name }}
+          tag_name: ${{ github.ref_type == 'tag' && github.ref_name || 'v2.5.0' }}
           name: VaultGuard 360 Release ${{ github.ref_name }}
           body: |
             ## 🛡️ VaultGuard 360 Antivirus & Vaccine Suite Release ${{ github.ref_name }}
