@@ -23,6 +23,9 @@ namespace VaultGuard360
         [STAThread]
         public static void Main(string[] args)
         {
+            // Must set IE11 browser emulation BEFORE any WebBrowser control is instantiated
+            MainWindow.SetBrowserFeatureControl();
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             
@@ -172,7 +175,7 @@ namespace VaultGuard360
                 {
                     ServicePointManager.SecurityProtocol = (SecurityProtocolType)3072; // TLS 1.2
                     HttpWebRequest req = (HttpWebRequest)WebRequest.Create("https://api.github.com/repos/MAVIS-creator/PaintGuard/releases/latest");
-                    req.UserAgent = "VaultGuard360-AppHost/2.5.0";
+                    req.UserAgent = "VaultGuard360-AppHost/1.0.0";
                     req.Timeout = 4000;
                     using (HttpWebResponse resp = (HttpWebResponse)req.GetResponse())
                     {
@@ -186,7 +189,7 @@ namespace VaultGuard360
                                 int end = json.IndexOf("\"", start);
                                 string latestTag = json.Substring(start, end - start);
                                 
-                                if (!latestTag.Equals("v2.5.0", StringComparison.OrdinalIgnoreCase))
+                                if (!latestTag.Equals("v1.0.0", StringComparison.OrdinalIgnoreCase))
                                 {
                                     this.Invoke((Action)(() =>
                                     {
@@ -198,7 +201,7 @@ namespace VaultGuard360
                                 {
                                     this.Invoke((Action)(() =>
                                     {
-                                        MessageBox.Show("You are running the latest version of VaultGuard 360 (v2.5.0).", "VaultGuard 360 Auto-Update", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                        MessageBox.Show("You are running the latest version of VaultGuard 360 (v1.0.0).", "VaultGuard 360 Auto-Update", MessageBoxButtons.OK, MessageBoxIcon.Information);
                                     }));
                                 }
                             }
@@ -424,7 +427,7 @@ namespace VaultGuard360
         {
             MessageBox.Show(
                 "VaultGuard 360 Antivirus & Removable Media Vaccine Suite\n\n" +
-                "Version: 2.5.0 Premium Edition\n" +
+                "Version: 1.0.0 Premium Edition\n" +
                 "Created by: Klyvex Studios\n" +
                 "Engine: PowerShell Real-Time Heuristic Scanner\n" +
                 "Architecture: Native .NET Desktop Host with Chromium/Edge Engine\n\n" +
@@ -461,14 +464,26 @@ namespace VaultGuard360
             }
         }
 
-        private static void SetBrowserFeatureControl()
+        public static void SetBrowserFeatureControl()
         {
             try
             {
                 var fileName = Path.GetFileName(Process.GetCurrentProcess().MainModule.FileName);
-                using (var key = Registry.CurrentUser.CreateSubKey(@"Software\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION"))
+                string[] subKeys = new string[] {
+                    @"Software\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION",
+                    @"Software\Wow6432Node\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION"
+                };
+
+                foreach (string subKey in subKeys)
                 {
-                    if (key != null) key.SetValue(fileName, 11001, RegistryValueKind.DWord); // Force IE11 mode
+                    using (var key = Registry.CurrentUser.CreateSubKey(subKey))
+                    {
+                        if (key != null)
+                        {
+                            key.SetValue(fileName, 11001, RegistryValueKind.DWord); // 11001 = IE11 Mode
+                            key.SetValue("VaultGuard360.exe", 11001, RegistryValueKind.DWord);
+                        }
+                    }
                 }
             }
             catch {}

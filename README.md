@@ -1,14 +1,13 @@
 # 🛡️ VaultGuard 360 Antivirus & Vaccine Suite
-*Created by Klyvex Studios*
+*Created by Klyvex Studios - Version v1.0.0*
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Version](https://img.shields.io/badge/Version-v1.0.0-68dba9.svg)](#architecture-overview)
 [![Security Architecture](https://img.shields.io/badge/Security-VaultGuard%20360-2563eb.svg)](#architecture-overview)
 [![PowerShell Engine](https://img.shields.io/badge/PowerShell-5.1%20%7C%207%2B-059669.svg)](#architecture-overview)
 [![Native Desktop App](https://img.shields.io/badge/App-C%23%20Native%20Host-3b82f6.svg)](#-native-desktop-application--installer-build-guide)
-[![Dual Vault](https://img.shields.io/badge/Vault-Dual--Compartment-d97706.svg)](#1-dual-compartment-vault-architecture)
-[![USB Vaccine](https://img.shields.io/badge/Vaccine-Auto--USB%20Watcher-059669.svg)](#4-real-time-usb-watcher--vaccine-guard)
 
-**VaultGuard 360** is a complete, enterprise-grade incident response, clean-file integrity vault, self-protecting immunity engine, and multi-family antivirus suite engineered by **Klyvex Studios** to neutralize removable media malware and PE file infectors.
+**VaultGuard 360** (v1.0.0) is a complete, enterprise-grade incident response, clean-file integrity vault, self-protecting immunity engine, and multi-family antivirus suite engineered by **Klyvex Studios** to neutralize removable media malware and PE file infectors.
 
 ### 🌟 Complete Feature Matrix
 - **Native Desktop Window & System Tray Host (`VaultGuard360.exe`)**: Compiled C#/.NET desktop host featuring single-instance Mutex guard, system tray context controls, and auto-start management.

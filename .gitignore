@@ -23,7 +23,16 @@ Thumbs.db
 Desktop.ini
 $RECYCLE.BIN/
 *.stackdump
-/stitch_vaultguard*
+
+# Design, UI Generator & App Build Pipeline Tools
+/stitch_vaultguard_360_desktop_dashboard/
+/stitch_vaultguard*/
+MakeIcon.ps1
+ConvertLogoToIcon.ps1
+Build-App.ps1
+Build-Installer.ps1
+RUN-ALL.bat
+Publish-Release.ps1
 
 # Compiled Binaries & Release Output
 /Output/

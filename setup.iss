@@ -5,7 +5,7 @@
 ; ==============================================================================
 
 #define MyAppName "VaultGuard 360"
-#define MyAppVersion "2.5.0"
+#define MyAppVersion "1.0.0"
 #define MyAppPublisher "Klyvex Studios"
 #define MyAppURL "https://github.com/MAVIS-creator/PaintGuard"
 #define MyAppExeName "VaultGuard360.exe"
