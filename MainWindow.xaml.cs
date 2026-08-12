@@ -8,6 +8,8 @@ namespace VaultGuard360
         public MainWindow()
         {
             InitializeComponent();
+            MaxHeight = SystemParameters.WorkArea.Height - 20;
+            MaxWidth = SystemParameters.WorkArea.Width - 20;
         }
 
         private MainViewModel? VM => DataContext as MainViewModel;

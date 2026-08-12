@@ -4,7 +4,7 @@
         xmlns:views="clr-namespace:VaultGuard360.Views"
         xmlns:vm="clr-namespace:VaultGuard360.ViewModels"
         Title="VaultGuard 360 Antivirus"
-        Height="900" Width="1440" MinWidth="1100" MinHeight="700"
+        Height="720" Width="1180" MinWidth="980" MinHeight="600"
         WindowStartupLocation="CenterScreen"
         WindowStyle="None"
         AllowsTransparency="True"

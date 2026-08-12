@@ -44,72 +44,97 @@ namespace VaultGuard360.Setup.Services
                     
                     // Check if embedded payload.zip exists in assembly resources
                     var assembly = typeof(InstallerEngineService).Assembly;
-                    using var payloadStream = assembly.GetManifestResourceStream("VaultGuard360.Setup.payload.zip");
-
-                    if (payloadStream != null)
+                    try
                     {
-                        using var archive = new ZipArchive(payloadStream, ZipArchiveMode.Read);
-                        foreach (var entry in archive.Entries)
+                        using var payloadStream = assembly.GetManifestResourceStream("VaultGuard360.Setup.payload.zip");
+
+                        if (payloadStream != null)
                         {
-                            string destinationPath = Path.GetFullPath(Path.Combine(DefaultInstallPath, entry.FullName));
-                            if (destinationPath.StartsWith(DefaultInstallPath, StringComparison.OrdinalIgnoreCase))
+                            using var archive = new ZipArchive(payloadStream, ZipArchiveMode.Read);
+                            foreach (var entry in archive.Entries)
                             {
-                                if (string.IsNullOrEmpty(entry.Name))
+                                string destinationPath = Path.GetFullPath(Path.Combine(DefaultInstallPath, entry.FullName));
+                                if (destinationPath.StartsWith(DefaultInstallPath, StringComparison.OrdinalIgnoreCase))
                                 {
-                                    Directory.CreateDirectory(destinationPath);
-                                }
-                                else
-                                {
-                                    string? parentDir = Path.GetDirectoryName(destinationPath);
-                                    if (!string.IsNullOrEmpty(parentDir)) Directory.CreateDirectory(parentDir);
-                                    entry.ExtractToFile(destinationPath, overwrite: true);
+                                    if (string.IsNullOrEmpty(entry.Name))
+                                    {
+                                        Directory.CreateDirectory(destinationPath);
+                                        OnProgressChanged?.Invoke(35, $"[DIR] Created {destinationPath}");
+                                    }
+                                    else
+                                    {
+                                        string? parentDir = Path.GetDirectoryName(destinationPath);
+                                        if (!string.IsNullOrEmpty(parentDir)) Directory.CreateDirectory(parentDir);
+                                        entry.ExtractToFile(destinationPath, overwrite: true);
+                                        OnProgressChanged?.Invoke(50, $"[FILE] Extracted {entry.FullName} -> {destinationPath}");
+                                    }
                                 }
                             }
                         }
-                    }
-                    else
-                    {
-                        string sourcePublishDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "bin", "Publish");
-                        if (!Directory.Exists(sourcePublishDir))
+                        else
                         {
-                            sourcePublishDir = Path.Combine(Environment.CurrentDirectory, "bin", "Publish");
-                        }
-                        if (!Directory.Exists(sourcePublishDir))
-                        {
-                            sourcePublishDir = AppDomain.CurrentDomain.BaseDirectory;
+                            string sourcePublishDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "bin", "Publish");
+                            if (!Directory.Exists(sourcePublishDir))
+                            {
+                                sourcePublishDir = Path.Combine(Environment.CurrentDirectory, "bin", "Publish");
+                            }
+                            if (!Directory.Exists(sourcePublishDir))
+                            {
+                                sourcePublishDir = AppDomain.CurrentDomain.BaseDirectory;
+                            }
+
+                            CopyDirectoryContents(sourcePublishDir, DefaultInstallPath);
                         }
 
-                        CopyDirectoryContents(sourcePublishDir, DefaultInstallPath);
+                        // Create dedicated Uninstall.exe binary in install folder
+                        string currentSetupExe = System.Diagnostics.Process.GetCurrentProcess().MainModule?.FileName ?? "";
+                        string uninstallerPath = Path.Combine(DefaultInstallPath, "Uninstall.exe");
+                        if (File.Exists(currentSetupExe) && !string.Equals(currentSetupExe, uninstallerPath, StringComparison.OrdinalIgnoreCase))
+                        {
+                            File.Copy(currentSetupExe, uninstallerPath, overwrite: true);
+                            OnProgressChanged?.Invoke(60, $"[FILE] Deployed Uninstaller binary -> {uninstallerPath}");
+                        }
                     }
-                    Task.Delay(500).Wait();
+                    catch (Exception ex)
+                    {
+                        OnProgressChanged?.Invoke(50, $"[WARN] Extraction note: {ex.Message}");
+                    }
+                    Task.Delay(300).Wait();
 
                     // Step 3: Installing protection modules
                     OnStepStatusUpdated?.Invoke("Step3", true);
-                    OnProgressChanged?.Invoke(70, "Installing protection modules & heuristic rulebase...");
-                    Task.Delay(500).Wait();
+                    OnProgressChanged?.Invoke(70, "Installing heuristic engines & vaccine trap modules...");
+                    Task.Delay(300).Wait();
 
                     // Step 4: Creating shortcuts & registry entries
                     OnStepStatusUpdated?.Invoke("Step4", true);
-                    OnProgressChanged?.Invoke(85, "Creating system shortcuts & registering services...");
+                    OnProgressChanged?.Invoke(85, "Registering Windows system shortcuts & registry keys...");
 
                     string exePath = Path.Combine(DefaultInstallPath, "VaultGuard360.exe");
+                    string uninstallerExe = Path.Combine(DefaultInstallPath, "Uninstall.exe");
+                    if (!File.Exists(uninstallerExe)) uninstallerExe = exePath;
 
                     if (CreateDesktopShortcut)
                     {
-                        CreateShortcut(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "VaultGuard 360.lnk"), exePath);
+                        string desktopLnk = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "VaultGuard 360.lnk");
+                        CreateShortcut(desktopLnk, exePath);
+                        OnProgressChanged?.Invoke(88, $"[LINK] Created Desktop shortcut -> {desktopLnk}");
                     }
 
                     if (CreateStartMenuShortcut)
                     {
                         string startMenuDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Programs), "VaultGuard 360");
                         if (!Directory.Exists(startMenuDir)) Directory.CreateDirectory(startMenuDir);
-                        CreateShortcut(Path.Combine(startMenuDir, "VaultGuard 360.lnk"), exePath);
+                        string startLnk = Path.Combine(startMenuDir, "VaultGuard 360.lnk");
+                        CreateShortcut(startLnk, exePath);
+                        OnProgressChanged?.Invoke(90, $"[LINK] Created Start Menu shortcut -> {startLnk}");
                     }
 
                     if (AutoStartOnBoot)
                     {
                         using RegistryKey? key = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Run", true);
                         key?.SetValue("VaultGuard360", $"\"{exePath}\" --autostart");
+                        OnProgressChanged?.Invoke(92, @"[REG] Set HKCU\Software\Microsoft\Windows\CurrentVersion\Run\VaultGuard360");
                     }
 
                     // Windows Add/Remove Programs Registration
@@ -125,19 +150,89 @@ namespace VaultGuard360.Setup.Services
                             appKey.SetValue("Publisher", "Klyvex Studios");
                             appKey.SetValue("InstallLocation", DefaultInstallPath);
                             appKey.SetValue("DisplayIcon", exePath);
-                            appKey.SetValue("UninstallString", $"\"{exePath}\" --uninstall");
+                            appKey.SetValue("UninstallString", $"\"{uninstallerExe}\" --uninstall");
                             appKey.SetValue("NoModify", 1);
                             appKey.SetValue("NoRepair", 1);
+                            OnProgressChanged?.Invoke(95, @"[REG] Registered HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\VaultGuard360");
                         }
                     }
-                    catch { }
+                    catch (Exception regEx)
+                    {
+                        OnProgressChanged?.Invoke(95, $"[WARN] Registry note: {regEx.Message}");
+                    }
 
                     // Step 5: Configuring protection
                     OnStepStatusUpdated?.Invoke("Step5", true);
                     OnProgressChanged?.Invoke(100, "Installation complete. System immunized.");
-                    Task.Delay(500).Wait();
+                    Task.Delay(300).Wait();
 
                     OnInstallationCompleted?.Invoke(true, "Successfully deployed VaultGuard 360 Security Suite.");
+                }
+                catch (Exception ex)
+                {
+                    OnInstallationCompleted?.Invoke(false, ex.Message);
+                }
+            });
+        }
+
+        public async Task StartUninstallationAsync()
+        {
+            await Task.Run(() =>
+            {
+                try
+                {
+                    OnProgressChanged?.Invoke(10, "Stopping VaultGuard 360 active processes...");
+                    foreach (var proc in System.Diagnostics.Process.GetProcessesByName("VaultGuard360"))
+                    {
+                        try { proc.Kill(); } catch { }
+                    }
+
+                    OnProgressChanged?.Invoke(30, "Removing Windows Startup registry key...");
+                    try
+                    {
+                        using RegistryKey? runKey = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Run", true);
+                        runKey?.DeleteValue("VaultGuard360", false);
+                    }
+                    catch { }
+
+                    OnProgressChanged?.Invoke(50, "Removing Add/Remove Programs registry key...");
+                    try
+                    {
+                        using RegistryKey? uninstallRoot = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall", true)
+                                                        ?? Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall", true);
+                        uninstallRoot?.DeleteSubKeyTree("VaultGuard360", false);
+                    }
+                    catch { }
+
+                    OnProgressChanged?.Invoke(70, "Removing Desktop & Start Menu shortcuts...");
+                    try
+                    {
+                        string desktopLnk = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "VaultGuard 360.lnk");
+                        if (File.Exists(desktopLnk)) File.Delete(desktopLnk);
+
+                        string startMenuDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Programs), "VaultGuard 360");
+                        if (Directory.Exists(startMenuDir)) Directory.Delete(startMenuDir, true);
+                    }
+                    catch { }
+
+                    OnProgressChanged?.Invoke(90, "Cleaning application directory...");
+                    try
+                    {
+                        if (Directory.Exists(DefaultInstallPath))
+                        {
+                            foreach (var f in Directory.GetFiles(DefaultInstallPath))
+                            {
+                                if (!f.EndsWith("Uninstall.exe", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    try { File.Delete(f); } catch { }
+                                }
+                            }
+                        }
+                    }
+                    catch { }
+
+                    OnProgressChanged?.Invoke(100, "Uninstallation completed successfully.");
+                    OnInstallationCompleted?.Invoke(true, "VaultGuard 360 has been uninstalled from your system.");
                 }
                 catch (Exception ex)
                 {

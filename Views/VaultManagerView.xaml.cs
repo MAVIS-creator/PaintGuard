@@ -11,9 +11,27 @@ namespace VaultGuard360.Views
             InitializeComponent();
         }
 
+        private VaultViewModel? VM => DataContext as VaultViewModel;
+
+        private async void CreateSnapshot_Click(object sender, RoutedEventArgs e)
+        {
+            if (VM != null)
+            {
+                await VM.CreateSystemBaselineSnapshotAsync();
+            }
+        }
+
+        private async void RunExpiroRemediation_Click(object sender, RoutedEventArgs e)
+        {
+            if (VM != null)
+            {
+                await VM.RunExpiroRemediationAsync();
+            }
+        }
+
         private void SyncVault_Click(object sender, RoutedEventArgs e)
         {
-            if (DataContext is VaultViewModel vm) vm.SyncVaults();
+            VM?.SyncVaults();
         }
     }
 }
