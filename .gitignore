@@ -30,7 +30,6 @@ $RECYCLE.BIN/
 MakeIcon.ps1
 ConvertLogoToIcon.ps1
 Build-App.ps1
-Build-Installer.ps1
 RUN-ALL.bat
 Publish-Release.ps1
 
