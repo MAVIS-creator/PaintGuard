@@ -130,6 +130,10 @@ function Repair-VaultGuardPersistence {
             } elseif ($Finding.Type -eq "Scheduled Task") {
                 Unregister-ScheduledTask -TaskName $Finding.Name -Confirm:$false -ErrorAction Stop
                 $Actions += "Unregistered malicious scheduled task: $($Finding.Name)"
+            } elseif ($Finding.Type -eq "WMI Hook") {
+                Get-CimInstance -Namespace "root\subscription" -ClassName "__EventConsumer" | Where-Object { $_.Name -eq $Finding.Name } | Remove-CimInstance -ErrorAction SilentlyContinue
+                Get-CimInstance -Namespace "root\subscription" -ClassName "__EventFilter" | Where-Object { $_.Name -eq $Finding.Name } | Remove-CimInstance -ErrorAction SilentlyContinue
+                $Actions += "Purged malicious WMI Event Consumer & Filter: $($Finding.Name)"
             }
         } catch {
             $Actions += "Failed to repair $($Finding.Name): $($_.Exception.Message)"

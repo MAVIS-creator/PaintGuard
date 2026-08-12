@@ -11,19 +11,24 @@ namespace VaultGuard360.Views
             InitializeComponent();
         }
 
+        private ScanViewModel? VM => DataContext as ScanViewModel;
+
         private void SetPathC_Click(object sender, RoutedEventArgs e)
         {
-            if (DataContext is ScanViewModel vm) vm.ScanPath = "C:\\";
+            if (VM != null) VM.ScanPath = "C:\\";
         }
 
         private void SetPathD_Click(object sender, RoutedEventArgs e)
         {
-            if (DataContext is ScanViewModel vm) vm.ScanPath = "D:\\";
+            if (VM != null) VM.ScanPath = "D:\\";
         }
 
-        private void StartScan_Click(object sender, RoutedEventArgs e)
+        private async void StartScan_Click(object sender, RoutedEventArgs e)
         {
-            if (DataContext is ScanViewModel vm) vm.StartHeuristicScan();
+            if (VM != null)
+            {
+                await VM.ExecuteUnifiedLifecycleScanAsync();
+            }
         }
     }
 }

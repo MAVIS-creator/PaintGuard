@@ -145,22 +145,19 @@ while ($script:Running -and $HttpListener.IsListening) {
 
         if ($RawPath.StartsWith("/api/")) {
             $AuthHeader = $Request.Headers["Authorization"]
-            $IsLoopback = $Request.IsLocal
             $TokenValid = $false
             
             if ($AuthHeader -and $AuthHeader.StartsWith("Bearer ")) {
                 $ProvidedToken = $AuthHeader.Substring(7).Trim()
-                if ($ProvidedToken -eq $BearerToken -or $ProvidedToken -eq "LOCAL_TOKEN") {
+                if ($ProvidedToken -eq $BearerToken) {
                     $TokenValid = $true
                 }
             }
             
             $QueryToken = $Request.QueryString["token"]
-            if ($QueryToken -eq $BearerToken -or $QueryToken -eq "LOCAL_TOKEN") {
+            if ($QueryToken -eq $BearerToken) {
                 $TokenValid = $true
             }
-            
-            if ($IsLoopback) { $TokenValid = $true }
             
             if (-not $TokenValid) {
                 Send-JsonResponse -Response $Response -Data @{ error = "Unauthorized: Invalid or missing Bearer token" } -StatusCode 401
